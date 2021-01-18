@@ -7,8 +7,8 @@
             <CRow>
               <CCol lg="10" sm="6">
                 <slot name="header">
-                  <img src="@/assets/images/proveedor.svg" width="30px" />
-                  Proveedores</slot
+                  <img src="@/assets/images/producto.svg" width="30px" />
+                  Productos</slot
                 >
               </CCol>
 
@@ -33,18 +33,48 @@
             <CDataTable
               :items-per-page="5"
               :dark="false"
-              :items="arrayProviders"
+              :items="arrayProducts"
               :hover="true"
               :fixed="true"
               :border="true"
               :column-filter="true"
-              caption="Lista de proveedores"
+              caption="Lista de productos"
               :fields="[
-                'name',
-                'number_doc',
-                'email',
-                'address',
-                'phone',
+                {
+                  key: 'name',
+                  label: 'Nombre',
+                  _style: { width: '20%' },
+                  sorter: false,
+                  filter: true,
+                },
+                {
+                  key: 'category_name',
+                  label: 'Categoría',
+                  _style: { width: '20%' },
+                  sorter: false,
+                  filter: true,
+                },
+                {
+                  key: 'brand',
+                  label: 'Marca',
+                  _style: { width: '20%' },
+                  sorter: false,
+                  filter: true,
+                },
+                {
+                  key: 'price',
+                  label: 'Precio',
+                  _style: { width: '20%' },
+                  sorter: false,
+                  filter: true,
+                },
+                {
+                  key: 'units',
+                  label: 'Unidad',
+                  _style: { width: '20%' },
+                  sorter: false,
+                  filter: true,
+                },
 
                 {
                   key: 'actions',
@@ -62,14 +92,14 @@
                   <button
                     href="#"
                     class="btn btn-sm"
-                    @click="edit(item.id_provider)"
+                    @click="edit(item.id_product)"
                   >
                     <span class="fa fa-edit"></span>
                   </button>
                   <button
                     href="#"
                     class="btn btn-sm"
-                    @click="delet(item.id_provider)"
+                    @click="delet(item.id_product)"
                   >
                     <span class="fa fa-trash"></span>
                   </button>
@@ -94,7 +124,7 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Registrar Proveedor</h4>
+            <h4 class="modal-title">Registrar producto</h4>
             <button
               type="button"
               class="close"
@@ -106,95 +136,80 @@
           </div>
           <div class="modal-body">
             <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="email-input"
-                >Tipo de documneto</label
-              >
-              <div class="col-md-9">
-                <select
-                  v-model="provider.type_doc"
-                  class="select-search form-control"
-                >
-                  <option value="0">Seleccionar</option>
-                  <option value="dni">DNI</option>
-                  <option value="ruc">RUC</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="text-input"
-                >Número de documento</label
-              >
-              <div class="col-md-9">
-                <input
-                  type="text"
-                  v-model="provider.number_doc"
-                  class="form-control"
-                  placeholder="Número de ruc/dni "
-                />
-              </div>
-            </div>
-
-            <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input"
                 >Nombre</label
               >
               <div class="col-md-9">
                 <input
                   type="text"
-                  v-model="provider.name"
+                  v-model="product.name"
                   class="form-control"
-                  placeholder="Nombre de proveedor"
+                  placeholder="Nombre de producto"
                 />
               </div>
             </div>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="email-input"
-                >Dirección</label
+                >Categoría</label
+              >
+              <div class="col-md-9">
+                <!--  <v-select
+                  v-model="category"
+                  @search="selectCategories"
+                  label="nombre"
+                  :options="arrayCategories"
+                  @input="getDatosCategory"
+                  placeholder="Buscar categorias..."
+                >
+                </v-select>-->
+                <model-list-select
+                  :list="arrayCategories"
+                  v-model="category"
+                  option-value="id_category"
+                  option-text="name"
+                  placeholder="seleccione"
+                >
+                </model-list-select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="email-input"
+                >Precio</label
               >
               <div class="col-md-9">
                 <input
-                  type="email"
-                  v-model="provider.address"
+                  type="number"
+                  v-model="product.price"
                   class="form-control"
-                  placeholder="Ingrese dirección"
+                  placeholder="Ingrese precio"
                 />
               </div>
             </div>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="email-input"
-                >Celular/Teléfono</label
+                >Marca</label
               >
               <div class="col-md-9">
                 <input
                   type="text"
-                  v-model="provider.phone"
+                  v-model="product.brand"
                   class="form-control"
-                  placeholder="Ingrese teléfono"
+                  placeholder="Ingrese nombre de marca"
                 />
               </div>
             </div>
 
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="email-input"
-                >Correo</label
+                >Unidad</label
               >
               <div class="col-md-9">
                 <input
                   type="email"
-                  v-model="provider.email"
+                  v-model="product.units"
                   class="form-control"
-                  placeholder="Ingrese correo"
+                  placeholder="Ingrese unidad"
                 />
-              </div>
-            </div>
-
-            <div v-show="arrayErrors.length" class="form-group row div-error">
-              <div class="text-center text-error">
-                <div
-                  v-for="error in arrayErrors"
-                  :key="error"
-                  v-text="error"
-                ></div>
               </div>
             </div>
           </div>
@@ -234,22 +249,25 @@ import "@fortawesome/fontawesome-free/js/all.js";
 import swal from "sweetalert";
 
 import CTableWrapper from "./Table.vue";
-import usersData from "../users/UsersData";
+
+import { ModelListSelect } from "vue-search-select";
+import "vue-search-select/dist/VueSearchSelect.css";
 
 export default {
   name: "Tables",
   components: { CTableWrapper },
   data() {
     return {
-      arrayProviders: [],
-      provider: {
+      arrayProducts: [],
+      product: {
         name: "",
-        type_doc: "",
-        number_doc: "",
-        email: "",
-        phone: "",
-        address: "",
+        brand: "",
+        price: "",
+        units: "",
+        id_category: "",
       },
+      category: {id_category:'',name:''},
+      arrayCategories: [],
       modalRegistrar: false,
       modal: 0,
       accion: 1,
@@ -258,25 +276,29 @@ export default {
       arrayErrors: [],
     };
   },
+
+  components: {
+    ModelListSelect,
+  },
   mounted() {
-    this.providers();
+    this.products();
+    this.categories();
   },
   methods: {
     clean() {
       let me = this;
-      me.provider = {
+      me.product = {
         name: "",
-        type_doc: "",
-        number_doc: "",
-        email: "",
-        phone: "",
-        address: "",
+        brand: "",
+        price: "",
+        units: "",
+        id_category: "",
       };
     },
 
     edit(id) {
       this.clean();
-      this.getProvider(id);
+      this.getProduct(id);
       let me = this;
       me.id = id;
       me.accion = 2;
@@ -294,9 +316,9 @@ export default {
           let me = this;
           me.id = id;
           axios
-            .delete("/auth/providers/" + me.id)
+            .delete("/auth/products/" + me.id)
             .then(function (response) {
-              me.providers();
+              me.products();
               swal("Correcto", response.data.message, "success");
             })
             .catch(function (error) {
@@ -312,12 +334,24 @@ export default {
       }
     },
 
-    providers() {
+    products() {
       let me = this;
       axios
-        .get("/auth/providers")
+        .get("/auth/products")
         .then(function (response) {
-          me.arrayProviders = response.data.data;
+          me.arrayProducts = response.data.data;
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    categories() {
+      let me = this;
+      axios
+        .get("/auth/categories")
+        .then(function (response) {
+          me.arrayCategories = response.data.data;
           console.log(response);
         })
         .catch(function (error) {
@@ -325,13 +359,15 @@ export default {
         });
     },
 
-    getProvider(id) {
+
+    getProduct(id) {
       let me = this;
       axios
-        .get("/auth/providers/" + id)
+        .get("/auth/products/" + id)
         .then(function (response) {
-          me.provider = response.data.data;
-          console.log(response);
+          me.product = response.data.data;
+       
+          me.category = { id_category: me.product.id_category };
         })
         .catch(function (error) {
           console.log(error);
@@ -340,19 +376,19 @@ export default {
 
     validate() {
       let me = this;
-      let count = 0;
+         let count=0
 
-      if (me.provider.type_doc == "") {
-        swal("Datos incompletos", "Ingrese un tipo de documento", "warning");
-        count = 1;
-      }
-      if (me.provider.number_doc == "") {
-        swal("Datos incompletos", "Ingrese un número de documento", "warning");
-        count = 1;
-      }
-      if (me.provider.name == "") {
+      if (me.product.name == "") {
         swal("Datos incompletos", "Ingrese un nombre", "warning");
-        count = 1;
+          count=1;
+      }
+      if (me.product.price == "") {
+        swal("Datos incompletos", "Ingrese el precio del producto", "warning");
+       count=1;
+      }
+      if (me.category.id_category == "") {
+        swal("Datos incompletos", "Seleccione una categoría", "warning");
+       count=1;
       }
 
       return count;
@@ -360,22 +396,21 @@ export default {
 
     save() {
       let me = this;
-      if (this.validate() > 0) {
+    if (this.validate()>0) {
         return false;
-      }
 
+      }    
       if (me.accion == 1) {
         axios
-          .post("/auth/providers", {
-            name: me.provider.name,
-            type_doc: me.provider.type_doc,
-            number_doc: me.provider.number_doc,
-            address: me.provider.address,
-            phone: me.provider.phone,
-            email: me.provider.email,
+          .post("/auth/products", {
+            name: me.product.name,
+            brand: me.product.brand,
+            price: me.product.price,
+            id_category: me.category.id_category,
+            units: me.product.units,
           })
           .then(function (response) {
-            me.providers();
+            me.products();
             swal("Correcto", response.data.message, "success");
           })
           .catch(function (error) {
@@ -385,16 +420,15 @@ export default {
         me.modal = 0;
       } else {
         axios
-          .put("/auth/providers/" + me.id, {
-            name: me.provider.name,
-            type_doc: me.provider.type_doc,
-            number_doc: me.provider.number_doc,
-            address: me.provider.address,
-            phone: me.provider.phone,
-            email: me.provider.email,
+          .put("/auth/products/" + me.id, {
+            name: me.product.name,
+            brand: me.product.brand,
+            price: me.product.price,
+            id_category: me.category.id_category,
+            units: me.product.units,
           })
           .then(function (response) {
-            me.providers();
+            me.products();
             swal("Correcto", response.data.message, "success");
           })
           .catch(function (error) {

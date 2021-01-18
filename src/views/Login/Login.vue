@@ -1,0 +1,143 @@
+<template>
+  <div
+    class="c-app flex-row align-items-center"
+    style="background-color: #205d69 !important"
+  >
+    <CContainer>
+      <CRow class="justify-content-center">
+        <CCol md="8">
+          <CCardGroup>
+            <CCard class="p-4">
+              <CCardBody>
+                <h2></h2>
+                <br /><br />
+                <p class="text-muted"></p>
+                <CInput
+                  placeholder="Usuario"
+                  autocomplete="username email"
+                  v-model="name"
+                >
+                  <template #prepend-content
+                    ><CIcon name="cil-user"
+                  /></template>
+                </CInput>
+                <CInput
+                  placeholder="Password"
+                  type="password"
+                  autocomplete="curent-password"
+                  v-model="password"
+                >
+                  <template #prepend-content
+                    ><CIcon name="cil-lock-locked"
+                  /></template>
+                </CInput>
+                <CRow>
+                  <CCol col="12" class="text-left">
+                    <button @click="login" class="btn btn-block btn-primary">
+                      Ingresar <i class="fa fa-unlock-alt"></i>
+                    </button>
+                  </CCol>
+                  <!-- <CCol col="6" class="text-right">
+                      <CButton color="link" class="px-0">Forgot password?</CButton>
+                      <CButton color="link" class="d-lg-none">Register now!</CButton>
+                    </CCol>-->
+                </CRow>
+              </CCardBody>
+            </CCard>
+            <CCard
+              color="secondary"
+              text-color="black"
+              class="text-center py-5 d-md-down-none"
+              body-wrapper
+            >
+              <CCardBody>
+                <img src="@/assets/images/logo.jpg" width="200px" />
+                <br />
+                <!--  <CButton
+                  color="light"
+                  variant="outline"
+                  size="lg"
+                >
+                  Register Now!
+                </CButton>-->
+              </CCardBody>
+            </CCard>
+          </CCardGroup>
+        </CCol>
+      </CRow>
+    </CContainer>
+  </div>
+</template>
+
+<script>
+import axios from "../../Config/axios";
+import "@fortawesome/fontawesome-free/js/all.js";
+import router from "../../router/index.js";
+import swal from "sweetalert";
+
+export default {
+  name: "Tables",
+  components: {},
+  data() {
+    return {
+      name: "henry",
+      password: "12345",
+      user: "",
+      modal: 0,
+      tipoAccion: 1,
+    };
+  },
+  mounted() {
+    if (localStorage.getItem("user") != null) {
+    } else {
+      //  window.location = "/";
+    }
+  },
+  methods: {
+    // DATATABLE
+    shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        let temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+      console.log(array);
+      return array;
+    },
+
+    getShuffledUsersData() {
+      return this.shuffleArray(usersData.slice(0));
+    },
+
+    login() {
+      let me = this;
+      axios
+        .post("/auth/login", {
+          name: me.name,
+          password: me.password,
+          remember_me: false,
+        })
+        .then(function (response) {
+          console.log(response);
+          me.user = response.data.user;
+          localStorage.setItem("token", response.data.access_token);
+          localStorage.setItem("user", response.data.user);
+          swal("Bienvenido", me.user, "success");
+          me.$router.push("/");
+          axios.defaults.headers.common["Authorization"] =
+            "Bearer " + response.data.access_token;
+          Vue.prototype.$user = response.data.user;
+        })
+        .catch(function (error) {
+          console.log(error.message);
+          //swal("Error", "Usuario o contraseña incorrectas", "warning");
+        });
+    },
+
+    validator(val) {
+      return val ? val.length > 0 : false;
+    },
+  },
+};
+</script>

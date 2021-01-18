@@ -7,6 +7,15 @@ const TheContainer = () => import('@/containers/TheContainer')
 // Views
 const Dashboard = () => import('@/views/Dashboard')
 const Provider = () => import('@/views/Config/Provider')
+const Product = () => import('@/views/Config/Product')
+const Category = () => import('@/views/Config/Category')
+const Client = () => import('@/views/Config/Client')
+const User = () => import('@/views/Config/User')
+
+const Login = () => import('@/views/Login/Login')
+const AddPurchase = () => import('@/views/Config/AddPurchase')
+const ListPurchase = () => import('@/views/Config/ListPurchase')
+
 
 const Colors = () => import('@/views/theme/Colors')
 const Typography = () => import('@/views/theme/Typography')
@@ -51,28 +60,33 @@ const Modals = () => import('@/views/notifications/Modals')
 // Views - Pages
 const Page404 = () => import('@/views/pages/Page404')
 const Page500 = () => import('@/views/pages/Page500')
-const Login = () => import('@/views/pages/Login')
+//const Login = () => import('@/views/pages/Login')
 const Register = () => import('@/views/pages/Register')
 
 // Users
 const Users = () => import('@/views/users/Users')
-const User = () => import('@/views/users/User')
+const Userl = () => import('@/views/users/User')
 
 Vue.use(Router)
 
-export default new Router({
+
+
+
+
+const router = new Router({
   mode: 'history', // https://router.vuejs.org/api/#mode
   linkActiveClass: 'active',
   scrollBehavior: () => ({ y: 0 }),
-  routes: configRoutes()
-})
-
-function configRoutes () {
-  return [
+  routes: [
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
+    },
     {
       path: '/',
       redirect: '/dashboard',
-      name: 'Home',
+      name: 'Inicio',
       component: TheContainer,
       children: [
         {
@@ -80,17 +94,73 @@ function configRoutes () {
           name: 'Dashboard',
           component: Dashboard
         },
+
         {
           path: 'provider',
-          name: 'Provider',
+          name: 'Proveedores',
           component: Provider
+        },
+        {
+          path: 'client',
+          name: 'Clientes',
+          component: Client
+        },
+        {
+          path: 'user',
+          name: 'Usuarios',
+          component: User
+        },
+        {
+          path: 'product',
+          name:'Productos',
+          redirect: '/product/list',
+          component: {
+            render(c) { return c('router-view') }
+          },
+          children: [
+
+            {
+              path: 'category',
+              name: 'Listar categorias',
+              component: Category
+            },
+            {
+              path: 'list',
+              name: 'Listar productos',
+              component: Product
+            }
+    
+          ]
+        },
+
+        {
+          path: 'purchase',
+          name:'Compras',
+          redirect: '/purchase/list',
+          component: {
+            render(c) { return c('router-view') }
+          },
+          children: [
+
+            {
+              path: 'add',
+              name: 'Registrar compra',
+              component: AddPurchase
+            },
+            {
+              path: 'list',
+              name: 'Listar compras',
+              component: ListPurchase
+            }
+    
+          ]
         },
         {
           path: 'theme',
           redirect: '/theme/colors',
           name: 'Theme',
           component: {
-            render (c) { return c('router-view') }
+            render(c) { return c('router-view') }
           },
           children: [
             {
@@ -146,7 +216,7 @@ function configRoutes () {
           redirect: '/base/cards',
           name: 'Base',
           component: {
-            render (c) { return c('router-view') }
+            render(c) { return c('router-view') }
           },
           children: [
             {
@@ -236,7 +306,7 @@ function configRoutes () {
           redirect: '/buttons/standard-buttons',
           name: 'Buttons',
           component: {
-            render (c) { return c('router-view') }
+            render(c) { return c('router-view') }
           },
           children: [
             {
@@ -266,7 +336,7 @@ function configRoutes () {
           redirect: '/icons/coreui-icons',
           name: 'CoreUI Icons',
           component: {
-            render (c) { return c('router-view') }
+            render(c) { return c('router-view') }
           },
           children: [
             {
@@ -291,7 +361,7 @@ function configRoutes () {
           redirect: '/notifications/alerts',
           name: 'Notifications',
           component: {
-            render (c) { return c('router-view') }
+            render(c) { return c('router-view') }
           },
           children: [
             {
@@ -318,7 +388,7 @@ function configRoutes () {
       redirect: '/pages/404',
       name: 'Pages',
       component: {
-        render (c) { return c('router-view') }
+        render(c) { return c('router-view') }
       },
       children: [
         {
@@ -332,8 +402,8 @@ function configRoutes () {
           component: Page500
         },
         {
-          path: 'login',
-          name: 'Login',
+          path: 'logins',
+          name: 'Logins',
           component: Login
         },
         {
@@ -342,7 +412,38 @@ function configRoutes () {
           component: Register
         }
       ]
+    },
+    {
+      path: "/404",
+      redirect: "/pages/404"
     }
   ]
-}
+
+})
+
+//VALIDAR SESIÓN EN RUTAS
+router.beforeEach((to, from, next) => {
+  if (to.path != '/login') { //para otras rutas
+    if (localStorage.getItem('token')) {
+      next()
+    } else {
+      next('/login')
+    }
+  } else { //para /login
+    if (localStorage.getItem('token')) {
+      next('/')
+    } else {
+      next();
+    }
+
+  }
+
+});
+
+
+
+export default router;
+
+
+
 

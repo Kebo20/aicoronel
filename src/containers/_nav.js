@@ -25,13 +25,13 @@ export default [
       {
         _name: 'CSidebarNavItem',
         name: 'Usuarios',
-        to: '/theme/colors',
+        to: '/user',
         icon: 'cil-drop'
       },
       {
         _name: 'CSidebarNavItem',
         name: 'Clientes',
-        to: '/theme/typography',
+        to: '/client',
         icon: 'cil-pencil'
       },
       {
@@ -43,12 +43,12 @@ export default [
 
           {
             name: 'Categorias',
-            to: '/base/popovers'
+            to: '/product/category'
           },
 
           {
             name: 'Productos',
-            to: '/base/switches'
+            to: '/product'
           }
         ]
       },
@@ -77,16 +77,16 @@ export default [
 
           {
             name: 'Registrar compra',
-            to: '/base/popovers'
+            to: '/purchase/add'
           },
 
           {
             name: 'Ver compras',
-            to: '/base/switches'
+            to: '/purchase/list'
           },
           {
             name: 'Reportes',
-            to: '/base/switches'
+            to: '/report-purchase'
           }
         ]
       },
@@ -98,15 +98,15 @@ export default [
         items: [
           {
             name: 'Registrar venta',
-            to: '/base/popovers'
+            to: '/add-sale'
           },
           {
             name: 'Ver ventas',
-            to: '/base/switches'
+            to: '/sale'
           },
           {
             name: 'Reportes',
-            to: '/base/switches'
+            to: '/report-sale'
           }
         ]
       },

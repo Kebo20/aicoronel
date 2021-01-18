@@ -16,13 +16,15 @@
     </CHeaderBrand>
     <CHeaderNav class="d-md-down-none mr-auto">
       <CHeaderNavItem class="px-3">
-        <CHeaderNavLink to="/dashboard"> Dashboard </CHeaderNavLink>
+        <CHeaderNavLink exact>{{ user }}</CHeaderNavLink>
+
+        <CHeaderNavLink> </CHeaderNavLink>
       </CHeaderNavItem>
       <CHeaderNavItem class="px-3">
-        <CHeaderNavLink to="/users" exact> Users </CHeaderNavLink>
+        <CHeaderNavLink exact> </CHeaderNavLink>
       </CHeaderNavItem>
       <CHeaderNavItem class="px-3">
-        <CHeaderNavLink> Settings </CHeaderNavLink>
+        <CHeaderNavLink> </CHeaderNavLink>
       </CHeaderNavItem>
     </CHeaderNav>
     <CHeaderNav class="mr-4">
@@ -51,11 +53,31 @@
 
 <script>
 import TheHeaderDropdownAccnt from "./TheHeaderDropdownAccnt";
+import axios from "../../src/Config/axios.js";
 
 export default {
   name: "TheHeader",
   components: {
     TheHeaderDropdownAccnt,
+  },
+  data(){
+    return {
+      user:''
+    };
+  },
+  mounted() {
+    let me = this;
+    me.user = localStorage.getItem("user");
+   // getUser()
+  },
+  methods: {
+    getUser() {
+      axios.get("auth/user").then(({ data }) => {
+        console.log("getUser: ", data);
+
+        localStorage.setItem("user", JSON.stringify(data));
+      });
+    },
   },
 };
 </script>

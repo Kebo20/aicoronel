@@ -7,8 +7,8 @@
             <CRow>
               <CCol lg="10" sm="6">
                 <slot name="header">
-                  <img src="@/assets/images/proveedor.svg" width="30px" />
-                  Proveedores</slot
+                  <img src="@/assets/images/cliente.svg" width="30px" />
+                  Clientes</slot
                 >
               </CCol>
 
@@ -33,12 +33,12 @@
             <CDataTable
               :items-per-page="5"
               :dark="false"
-              :items="arrayProviders"
+              :items="arrayClients"
               :hover="true"
               :fixed="true"
               :border="true"
               :column-filter="true"
-              caption="Lista de proveedores"
+              caption="Lista de clientes"
               :fields="[
                 'name',
                 'number_doc',
@@ -62,14 +62,14 @@
                   <button
                     href="#"
                     class="btn btn-sm"
-                    @click="edit(item.id_provider)"
+                    @click="edit(item.id_client)"
                   >
                     <span class="fa fa-edit"></span>
                   </button>
                   <button
                     href="#"
                     class="btn btn-sm"
-                    @click="delet(item.id_provider)"
+                    @click="delet(item.id_client)"
                   >
                     <span class="fa fa-trash"></span>
                   </button>
@@ -94,7 +94,7 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Registrar Proveedor</h4>
+            <h4 class="modal-title">Registrar cliente</h4>
             <button
               type="button"
               class="close"
@@ -111,7 +111,7 @@
               >
               <div class="col-md-9">
                 <select
-                  v-model="provider.type_doc"
+                  v-model="client.type_doc"
                   class="select-search form-control"
                 >
                   <option value="0">Seleccionar</option>
@@ -127,7 +127,7 @@
               <div class="col-md-9">
                 <input
                   type="text"
-                  v-model="provider.number_doc"
+                  v-model="client.number_doc"
                   class="form-control"
                   placeholder="Número de ruc/dni "
                 />
@@ -141,7 +141,7 @@
               <div class="col-md-9">
                 <input
                   type="text"
-                  v-model="provider.name"
+                  v-model="client.name"
                   class="form-control"
                   placeholder="Nombre de proveedor"
                 />
@@ -154,7 +154,7 @@
               <div class="col-md-9">
                 <input
                   type="email"
-                  v-model="provider.address"
+                  v-model="client.address"
                   class="form-control"
                   placeholder="Ingrese dirección"
                 />
@@ -167,7 +167,7 @@
               <div class="col-md-9">
                 <input
                   type="text"
-                  v-model="provider.phone"
+                  v-model="client.phone"
                   class="form-control"
                   placeholder="Ingrese teléfono"
                 />
@@ -181,22 +181,14 @@
               <div class="col-md-9">
                 <input
                   type="email"
-                  v-model="provider.email"
+                  v-model="client.email"
                   class="form-control"
                   placeholder="Ingrese correo"
                 />
               </div>
             </div>
 
-            <div v-show="arrayErrors.length" class="form-group row div-error">
-              <div class="text-center text-error">
-                <div
-                  v-for="error in arrayErrors"
-                  :key="error"
-                  v-text="error"
-                ></div>
-              </div>
-            </div>
+     
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" @click="modal = 0">
@@ -241,8 +233,8 @@ export default {
   components: { CTableWrapper },
   data() {
     return {
-      arrayProviders: [],
-      provider: {
+      arrayClients: [],
+      client: {
         name: "",
         type_doc: "",
         number_doc: "",
@@ -259,12 +251,12 @@ export default {
     };
   },
   mounted() {
-    this.providers();
+    this.clients();
   },
   methods: {
     clean() {
       let me = this;
-      me.provider = {
+      me.client = {
         name: "",
         type_doc: "",
         number_doc: "",
@@ -276,7 +268,7 @@ export default {
 
     edit(id) {
       this.clean();
-      this.getProvider(id);
+      this.getClient(id);
       let me = this;
       me.id = id;
       me.accion = 2;
@@ -294,9 +286,9 @@ export default {
           let me = this;
           me.id = id;
           axios
-            .delete("/auth/providers/" + me.id)
+            .delete("/auth/clients/" + me.id)
             .then(function (response) {
-              me.providers();
+              me.clients();
               swal("Correcto", response.data.message, "success");
             })
             .catch(function (error) {
@@ -312,12 +304,12 @@ export default {
       }
     },
 
-    providers() {
+    clients() {
       let me = this;
       axios
-        .get("/auth/providers")
+        .get("/auth/clients")
         .then(function (response) {
-          me.arrayProviders = response.data.data;
+          me.arrayClients = response.data.data;
           console.log(response);
         })
         .catch(function (error) {
@@ -325,12 +317,12 @@ export default {
         });
     },
 
-    getProvider(id) {
+    getClient(id) {
       let me = this;
       axios
-        .get("/auth/providers/" + id)
+        .get("/auth/clients/" + id)
         .then(function (response) {
-          me.provider = response.data.data;
+          me.client = response.data.data;
           console.log(response);
         })
         .catch(function (error) {
@@ -342,15 +334,15 @@ export default {
       let me = this;
       let count = 0;
 
-      if (me.provider.type_doc == "") {
+      if (me.client.type_doc == "") {
         swal("Datos incompletos", "Ingrese un tipo de documento", "warning");
         count = 1;
       }
-      if (me.provider.number_doc == "") {
+      if (me.client.number_doc == "") {
         swal("Datos incompletos", "Ingrese un número de documento", "warning");
         count = 1;
       }
-      if (me.provider.name == "") {
+      if (me.client.name == "") {
         swal("Datos incompletos", "Ingrese un nombre", "warning");
         count = 1;
       }
@@ -366,16 +358,16 @@ export default {
 
       if (me.accion == 1) {
         axios
-          .post("/auth/providers", {
-            name: me.provider.name,
-            type_doc: me.provider.type_doc,
-            number_doc: me.provider.number_doc,
-            address: me.provider.address,
-            phone: me.provider.phone,
-            email: me.provider.email,
+          .post("/auth/clients", {
+            name: me.client.name,
+            type_doc: me.client.type_doc,
+            number_doc: me.client.number_doc,
+            address: me.client.address,
+            phone: me.client.phone,
+            email: me.client.email,
           })
           .then(function (response) {
-            me.providers();
+            me.clients();
             swal("Correcto", response.data.message, "success");
           })
           .catch(function (error) {
@@ -385,16 +377,16 @@ export default {
         me.modal = 0;
       } else {
         axios
-          .put("/auth/providers/" + me.id, {
-            name: me.provider.name,
-            type_doc: me.provider.type_doc,
-            number_doc: me.provider.number_doc,
-            address: me.provider.address,
-            phone: me.provider.phone,
-            email: me.provider.email,
+          .put("/auth/clients/" + me.id, {
+            name: me.client.name,
+            type_doc: me.client.type_doc,
+            number_doc: me.client.number_doc,
+            address: me.client.address,
+            phone: me.client.phone,
+            email: me.client.email,
           })
           .then(function (response) {
-            me.providers();
+            me.clients();
             swal("Correcto", response.data.message, "success");
           })
           .catch(function (error) {

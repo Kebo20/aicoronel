@@ -7,8 +7,8 @@
             <CRow>
               <CCol lg="10" sm="6">
                 <slot name="header">
-                  <img src="@/assets/images/proveedor.svg" width="30px" />
-                  Proveedores</slot
+                  <img src="@/assets/images/producto.svg" width="30px" />
+                  Categoría de productos</slot
                 >
               </CCol>
 
@@ -33,18 +33,15 @@
             <CDataTable
               :items-per-page="5"
               :dark="false"
-              :items="arrayProviders"
+              :items="arrayCategories"
               :hover="true"
               :fixed="true"
               :border="true"
               :column-filter="true"
-              caption="Lista de proveedores"
+              caption="Lista de categorias"
               :fields="[
                 'name',
-                'number_doc',
-                'email',
-                'address',
-                'phone',
+                
 
                 {
                   key: 'actions',
@@ -62,14 +59,14 @@
                   <button
                     href="#"
                     class="btn btn-sm"
-                    @click="edit(item.id_provider)"
+                    @click="edit(item.id_category)"
                   >
                     <span class="fa fa-edit"></span>
                   </button>
                   <button
                     href="#"
                     class="btn btn-sm"
-                    @click="delet(item.id_provider)"
+                    @click="delet(item.id_category)"
                   >
                     <span class="fa fa-trash"></span>
                   </button>
@@ -94,7 +91,7 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Registrar Proveedor</h4>
+            <h4 class="modal-title">Registrar categoría</h4>
             <button
               type="button"
               class="close"
@@ -105,98 +102,24 @@
             </button>
           </div>
           <div class="modal-body">
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="email-input"
-                >Tipo de documneto</label
-              >
-              <div class="col-md-9">
-                <select
-                  v-model="provider.type_doc"
-                  class="select-search form-control"
+          
+            
+
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input"
+                  >Descripción</label
                 >
-                  <option value="0">Seleccionar</option>
-                  <option value="dni">DNI</option>
-                  <option value="ruc">RUC</option>
-                </select>
+                <div class="col-md-9">
+                  <input
+                    type="text"
+                    v-model="category.name"
+                    class="form-control"
+                    placeholder="Nombre de categoría"
+                  />
+                </div>
               </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="text-input"
-                >Número de documento</label
-              >
-              <div class="col-md-9">
-                <input
-                  type="text"
-                  v-model="provider.number_doc"
-                  class="form-control"
-                  placeholder="Número de ruc/dni "
-                />
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="text-input"
-                >Nombre</label
-              >
-              <div class="col-md-9">
-                <input
-                  type="text"
-                  v-model="provider.name"
-                  class="form-control"
-                  placeholder="Nombre de proveedor"
-                />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="email-input"
-                >Dirección</label
-              >
-              <div class="col-md-9">
-                <input
-                  type="email"
-                  v-model="provider.address"
-                  class="form-control"
-                  placeholder="Ingrese dirección"
-                />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="email-input"
-                >Celular/Teléfono</label
-              >
-              <div class="col-md-9">
-                <input
-                  type="text"
-                  v-model="provider.phone"
-                  class="form-control"
-                  placeholder="Ingrese teléfono"
-                />
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="email-input"
-                >Correo</label
-              >
-              <div class="col-md-9">
-                <input
-                  type="email"
-                  v-model="provider.email"
-                  class="form-control"
-                  placeholder="Ingrese correo"
-                />
-              </div>
-            </div>
-
-            <div v-show="arrayErrors.length" class="form-group row div-error">
-              <div class="text-center text-error">
-                <div
-                  v-for="error in arrayErrors"
-                  :key="error"
-                  v-text="error"
-                ></div>
-              </div>
-            </div>
+   
+            
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" @click="modal = 0">
@@ -234,53 +157,46 @@ import "@fortawesome/fontawesome-free/js/all.js";
 import swal from "sweetalert";
 
 import CTableWrapper from "./Table.vue";
-import usersData from "../users/UsersData";
 
 export default {
   name: "Tables",
   components: { CTableWrapper },
   data() {
     return {
-      arrayProviders: [],
-      provider: {
-        name: "",
-        type_doc: "",
-        number_doc: "",
-        email: "",
-        phone: "",
-        address: "",
+      arrayCategories: [],
+      category: {
+        name: ""
+       
       },
       modalRegistrar: false,
       modal: 0,
       accion: 1,
       id: "",
-      search: "",
-      arrayErrors: [],
+     
     };
   },
   mounted() {
-    this.providers();
+    this.categories();
   },
   methods: {
-    clean() {
+   
+ clean() {
+      
       let me = this;
-      me.provider = {
-        name: "",
-        type_doc: "",
-        number_doc: "",
-        email: "",
-        phone: "",
-        address: "",
+      me.category = {
+        name: ""
       };
     },
-
     edit(id) {
       this.clean();
-      this.getProvider(id);
+      this.getCategory(id);
       let me = this;
-      me.id = id;
       me.accion = 2;
+      me.id = id;
+     
       me.modal = 1;
+     
+      
     },
     delet(id) {
       swal({
@@ -294,9 +210,9 @@ export default {
           let me = this;
           me.id = id;
           axios
-            .delete("/auth/providers/" + me.id)
+            .delete("/auth/categories/" + me.id)
             .then(function (response) {
-              me.providers();
+              me.categories();
               swal("Correcto", response.data.message, "success");
             })
             .catch(function (error) {
@@ -312,12 +228,12 @@ export default {
       }
     },
 
-    providers() {
+    categories() {
       let me = this;
       axios
-        .get("/auth/providers")
+        .get("/auth/categories")
         .then(function (response) {
-          me.arrayProviders = response.data.data;
+          me.arrayCategories = response.data.data;
           console.log(response);
         })
         .catch(function (error) {
@@ -325,12 +241,12 @@ export default {
         });
     },
 
-    getProvider(id) {
+    getCategory(id) {
       let me = this;
       axios
-        .get("/auth/providers/" + id)
+        .get("/auth/categories/" + id)
         .then(function (response) {
-          me.provider = response.data.data;
+          me.category = response.data.data;
           console.log(response);
         })
         .catch(function (error) {
@@ -340,19 +256,10 @@ export default {
 
     validate() {
       let me = this;
-      let count = 0;
-
-      if (me.provider.type_doc == "") {
-        swal("Datos incompletos", "Ingrese un tipo de documento", "warning");
-        count = 1;
-      }
-      if (me.provider.number_doc == "") {
-        swal("Datos incompletos", "Ingrese un número de documento", "warning");
-        count = 1;
-      }
-      if (me.provider.name == "") {
+   let count=0
+      if (me.category.name == "") {
         swal("Datos incompletos", "Ingrese un nombre", "warning");
-        count = 1;
+         count=1;
       }
 
       return count;
@@ -360,22 +267,20 @@ export default {
 
     save() {
       let me = this;
-      if (this.validate() > 0) {
+      if (this.validate()>0) {
         return false;
-      }
 
+      }    
+      
+      
       if (me.accion == 1) {
         axios
-          .post("/auth/providers", {
-            name: me.provider.name,
-            type_doc: me.provider.type_doc,
-            number_doc: me.provider.number_doc,
-            address: me.provider.address,
-            phone: me.provider.phone,
-            email: me.provider.email,
+          .post("/auth/categories", {
+            name: me.category.name
+           
           })
           .then(function (response) {
-            me.providers();
+            me.categories();
             swal("Correcto", response.data.message, "success");
           })
           .catch(function (error) {
@@ -385,16 +290,11 @@ export default {
         me.modal = 0;
       } else {
         axios
-          .put("/auth/providers/" + me.id, {
-            name: me.provider.name,
-            type_doc: me.provider.type_doc,
-            number_doc: me.provider.number_doc,
-            address: me.provider.address,
-            phone: me.provider.phone,
-            email: me.provider.email,
+          .put("/auth/categories/" + me.id, {
+            name: me.category.name
           })
           .then(function (response) {
-            me.providers();
+            me.categories();
             swal("Correcto", response.data.message, "success");
           })
           .catch(function (error) {

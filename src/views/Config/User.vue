@@ -7,8 +7,8 @@
             <CRow>
               <CCol lg="10" sm="6">
                 <slot name="header">
-                  <img src="@/assets/images/proveedor.svg" width="30px" />
-                  Proveedores</slot
+                  <img src="@/assets/images/usuario.svg" width="30px" />
+                  Usuarios</slot
                 >
               </CCol>
 
@@ -33,18 +33,35 @@
             <CDataTable
               :items-per-page="5"
               :dark="false"
-              :items="arrayProviders"
+              :items="arrayUsers"
               :hover="true"
               :fixed="true"
               :border="true"
               :column-filter="true"
-              caption="Lista de proveedores"
+              caption="Lista de usuarios"
               :fields="[
-                'name',
-                'number_doc',
-                'email',
-                'address',
-                'phone',
+                {
+                  key: 'name',
+                  label: 'Usuario',
+                  _style: { width: '20%' },
+                  sorter: false,
+                  filter: true,
+                },
+                {
+                  key: 'email',
+                  label: 'Correo',
+                  _style: { width: '20%' },
+                  sorter: false,
+                  filter: true,
+                },
+                {
+                  key: 'role_name',
+                  label: 'Rol',
+                  _style: { width: '20%' },
+                  sorter: false,
+                  filter: true,
+                },
+               
 
                 {
                   key: 'actions',
@@ -62,14 +79,14 @@
                   <button
                     href="#"
                     class="btn btn-sm"
-                    @click="edit(item.id_provider)"
+                    @click="edit(item.id)"
                   >
                     <span class="fa fa-edit"></span>
                   </button>
                   <button
                     href="#"
                     class="btn btn-sm"
-                    @click="delet(item.id_provider)"
+                    @click="delet(item.id)"
                   >
                     <span class="fa fa-trash"></span>
                   </button>
@@ -94,7 +111,7 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Registrar Proveedor</h4>
+            <h4 class="modal-title">Registrar usuario</h4>
             <button
               type="button"
               class="close"
@@ -106,74 +123,34 @@
           </div>
           <div class="modal-body">
             <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="email-input"
-                >Tipo de documneto</label
-              >
-              <div class="col-md-9">
-                <select
-                  v-model="provider.type_doc"
-                  class="select-search form-control"
-                >
-                  <option value="0">Seleccionar</option>
-                  <option value="dni">DNI</option>
-                  <option value="ruc">RUC</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="text-input"
-                >Número de documento</label
-              >
-              <div class="col-md-9">
-                <input
-                  type="text"
-                  v-model="provider.number_doc"
-                  class="form-control"
-                  placeholder="Número de ruc/dni "
-                />
-              </div>
-            </div>
-
-            <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input"
                 >Nombre</label
               >
               <div class="col-md-9">
                 <input
                   type="text"
-                  v-model="provider.name"
+                  v-model="user.name"
                   class="form-control"
-                  placeholder="Nombre de proveedor"
+                  placeholder="Nombre de usuario"
                 />
               </div>
             </div>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="email-input"
-                >Dirección</label
+                >Rol</label
               >
               <div class="col-md-9">
-                <input
-                  type="email"
-                  v-model="provider.address"
-                  class="form-control"
-                  placeholder="Ingrese dirección"
-                />
+           
+                <model-list-select
+                  :list="arrayRoles"
+                  v-model="rol"
+                  option-value="id_role"
+                  option-text="name"
+                  placeholder="seleccione"
+                >
+                </model-list-select>
               </div>
             </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="email-input"
-                >Celular/Teléfono</label
-              >
-              <div class="col-md-9">
-                <input
-                  type="text"
-                  v-model="provider.phone"
-                  class="form-control"
-                  placeholder="Ingrese teléfono"
-                />
-              </div>
-            </div>
-
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="email-input"
                 >Correo</label
@@ -181,21 +158,27 @@
               <div class="col-md-9">
                 <input
                   type="email"
-                  v-model="provider.email"
+                  v-model="user.email"
                   class="form-control"
-                  placeholder="Ingrese correo"
+                  placeholder="Ingrese un correo"
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="email-input"
+                >Contraseña</label
+              >
+              <div class="col-md-9">
+                <input
+                  type="text"
+                  v-model="user.password"
+                  class="form-control"
+                  placeholder="Ingrese una contraseña"
                 />
               </div>
             </div>
 
-            <div v-show="arrayErrors.length" class="form-group row div-error">
-              <div class="text-center text-error">
-                <div
-                  v-for="error in arrayErrors"
-                  :key="error"
-                  v-text="error"
-                ></div>
-              </div>
+            
             </div>
           </div>
           <div class="modal-footer">
@@ -225,7 +208,6 @@
       <!-- /.modal-dialog -->
     </div>
     <!--Fin del modal-->
-  </div>
 </template>
 
 <script>
@@ -234,49 +216,54 @@ import "@fortawesome/fontawesome-free/js/all.js";
 import swal from "sweetalert";
 
 import CTableWrapper from "./Table.vue";
-import usersData from "../users/UsersData";
+
+import { ModelListSelect } from "vue-search-select";
+import "vue-search-select/dist/VueSearchSelect.css";
 
 export default {
   name: "Tables",
   components: { CTableWrapper },
   data() {
     return {
-      arrayProviders: [],
-      provider: {
+      arrayUsers: [],
+      user: {
         name: "",
-        type_doc: "",
-        number_doc: "",
         email: "",
-        phone: "",
-        address: "",
+        password: "",
+
+        id_rol: "",
       },
+      rol: { id_role: "", name: "" },
+      arrayRoles: [],
       modalRegistrar: false,
       modal: 0,
       accion: 1,
       id: "",
-      search: "",
-      arrayErrors: [],
     };
   },
+
+  components: {
+    ModelListSelect,
+  },
   mounted() {
-    this.providers();
+    this.users();
+    this.roles();
   },
   methods: {
     clean() {
       let me = this;
-      me.provider = {
+      me.user = {
         name: "",
-        type_doc: "",
-        number_doc: "",
         email: "",
-        phone: "",
-        address: "",
+        password: "",
+
+        id_role: "",
       };
     },
 
     edit(id) {
       this.clean();
-      this.getProvider(id);
+      this.getUser(id);
       let me = this;
       me.id = id;
       me.accion = 2;
@@ -294,9 +281,9 @@ export default {
           let me = this;
           me.id = id;
           axios
-            .delete("/auth/providers/" + me.id)
+            .delete("/auth/users/" + me.id)
             .then(function (response) {
-              me.providers();
+              me.users();
               swal("Correcto", response.data.message, "success");
             })
             .catch(function (error) {
@@ -312,12 +299,24 @@ export default {
       }
     },
 
-    providers() {
+    users() {
       let me = this;
       axios
-        .get("/auth/providers")
+        .get("/auth/users")
         .then(function (response) {
-          me.arrayProviders = response.data.data;
+          me.arrayUsers = response.data.data;
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    roles() {
+      let me = this;
+      axios
+        .get("/auth/roles")
+        .then(function (response) {
+          me.arrayRoles = response.data.data;
           console.log(response);
         })
         .catch(function (error) {
@@ -325,13 +324,13 @@ export default {
         });
     },
 
-    getProvider(id) {
+    getUser(id) {
       let me = this;
       axios
-        .get("/auth/providers/" + id)
+        .get("/auth/users/" + id)
         .then(function (response) {
-          me.provider = response.data.data;
-          console.log(response);
+          me.user = response.data.data;
+          me.rol = { id_role: me.user.id_role };
         })
         .catch(function (error) {
           console.log(error);
@@ -342,16 +341,20 @@ export default {
       let me = this;
       let count = 0;
 
-      if (me.provider.type_doc == "") {
-        swal("Datos incompletos", "Ingrese un tipo de documento", "warning");
-        count = 1;
-      }
-      if (me.provider.number_doc == "") {
-        swal("Datos incompletos", "Ingrese un número de documento", "warning");
-        count = 1;
-      }
-      if (me.provider.name == "") {
+      if (me.user.name == "") {
         swal("Datos incompletos", "Ingrese un nombre", "warning");
+        count = 1;
+      }
+      if (me.user.email == "") {
+        swal("Datos incompletos", "Ingrese un correo", "warning");
+        count = 1;
+      }
+      if (me.user.password == "") {
+        swal("Datos incompletos", "Ingrese una contraseña segura", "warning");
+        count = 1;
+      }
+      if (me.rol.id_role == "") {
+        swal("Datos incompletos", "Seleccione una categoría", "warning");
         count = 1;
       }
 
@@ -363,19 +366,16 @@ export default {
       if (this.validate() > 0) {
         return false;
       }
-
       if (me.accion == 1) {
         axios
-          .post("/auth/providers", {
-            name: me.provider.name,
-            type_doc: me.provider.type_doc,
-            number_doc: me.provider.number_doc,
-            address: me.provider.address,
-            phone: me.provider.phone,
-            email: me.provider.email,
+          .post("/auth/users", {
+            name: me.user.name,
+            email: me.user.email,
+            id_role: me.rol.id_role,
+            password: me.user.password,
           })
           .then(function (response) {
-            me.providers();
+            me.users();
             swal("Correcto", response.data.message, "success");
           })
           .catch(function (error) {
@@ -385,16 +385,14 @@ export default {
         me.modal = 0;
       } else {
         axios
-          .put("/auth/providers/" + me.id, {
-            name: me.provider.name,
-            type_doc: me.provider.type_doc,
-            number_doc: me.provider.number_doc,
-            address: me.provider.address,
-            phone: me.provider.phone,
-            email: me.provider.email,
+          .put("/auth/users/" + me.id, {
+            name: me.user.name,
+            email: me.user.email,
+            id_role: me.rol.id_role,
+            password: me.user.password,
           })
           .then(function (response) {
-            me.providers();
+            me.users();
             swal("Correcto", response.data.message, "success");
           })
           .catch(function (error) {
