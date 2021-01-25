@@ -15,6 +15,11 @@ const User = () => import('@/views/Config/User')
 const Login = () => import('@/views/Login/Login')
 const AddPurchase = () => import('@/views/Config/AddPurchase')
 const ListPurchase = () => import('@/views/Config/ListPurchase')
+const DetailPurchase = () => import('@/views/Config/DetailPurchase')
+
+const AddSale = () => import('@/views/Config/AddSale')
+const ListSale = () => import('@/views/Config/ListSale')
+const DetailSale = () => import('@/views/Config/DetailSale')
 
 
 const Colors = () => import('@/views/theme/Colors')
@@ -151,6 +156,38 @@ const router = new Router({
               path: 'list',
               name: 'Listar compras',
               component: ListPurchase
+            },
+            {
+              path: 'detail/:id',
+              name: 'Detalle de compra',
+              component: DetailPurchase
+            }
+    
+          ]
+        },
+        {
+          path: 'sale',
+          name:'Ventas',
+          redirect: '/sale/list',
+          component: {
+            render(c) { return c('router-view') }
+          },
+          children: [
+
+            {
+              path: 'add',
+              name: 'Registrar venta',
+              component: AddSale
+            },
+            {
+              path: 'list',
+              name: 'Listar ventas',
+              component: ListSale
+            },
+            {
+              path: 'detail/:id',
+              name: 'Detalle de venta',
+              component: DetailSale
             }
     
           ]

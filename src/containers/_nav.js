@@ -93,20 +93,20 @@ export default [
       {
         _name: 'CSidebarNavDropdown',
         name: 'Ventas',
-        route: '/base',
+        route: '/sale',
         icon: 'cil-puzzle',
         items: [
           {
             name: 'Registrar venta',
-            to: '/add-sale'
+            to: '/sale/add'
           },
           {
             name: 'Ver ventas',
-            to: '/sale'
+            to: '/sale/list'
           },
           {
             name: 'Reportes',
-            to: '/report-sale'
+            to: '/sale/report'
           }
         ]
       },

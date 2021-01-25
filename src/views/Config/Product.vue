@@ -414,8 +414,8 @@ export default {
             swal("Correcto", response.data.message, "success");
           })
           .catch(function (error) {
-            console.log(error);
-            swal("Error ", error, message, "error");
+             console.log(error.response);
+          swal("Error ", error.response.data.message, "error");
           });
         me.modal = 0;
       } else {
@@ -432,7 +432,8 @@ export default {
             swal("Correcto", response.data.message, "success");
           })
           .catch(function (error) {
-            swal("Error ", error.message, "error");
+             console.log(error.response);
+          swal("Error ", error.response.data.message, "error");
           });
 
         me.modal = 0;

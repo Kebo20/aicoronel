@@ -7,8 +7,8 @@
             <CRow>
               <CCol lg="10" sm="6">
                 <slot name="header">
-                  <img src="@/assets/images/compra.svg" width="30px" />
-                  Compras</slot
+                  <img src="@/assets/images/venta.svg" width="30px" />
+                  Ventas</slot
                 >
               </CCol>
             </CRow>
@@ -18,13 +18,12 @@
             <CDataTable
               :items-per-page="5"
               :dark="false"
-              :items="arrayPurchases"
-              :small="true"
+              :items="arraySales"
               :hover="true"
               :fixed="true"
               :border="true"
               :column-filter="true"
-              caption="Lista de compras"
+              caption="Lista de ventas"
               :fields="[
                 {
                   key: 'date',
@@ -48,8 +47,8 @@
                   filter: true,
                 },
                 {
-                  key: 'provider_name',
-                  label: 'Proveedor',
+                  key: 'client_name',
+                  label: 'Cliente',
                   _style: { width: '20%' },
                   sorter: false,
                   filter: true,
@@ -92,7 +91,7 @@
                   filter:true
                  },
 
-                {
+                 {
                   key: 'action_detail',
                   label: '',
                   _style: { width: '10%' },
@@ -111,7 +110,8 @@
               ]"
               pagination
             >
-              <template #status="{ item }">
+
+             <template #status="{ item }">
                 <td align="center">
                   <CBadge :color="item.status='0'?'danger':'success'">{{
                     item.status='0'?'Anulada':'Activa'
@@ -120,18 +120,20 @@
               </template>
               <template #action_detail="{ item }">
                 <td align="center">
-                  <router-link
-                    :to="{ path: `/purchase/detail/${item.id_purchase}` }"
-                  >
-                    <CBadge color="success"
-                      > <span class="fa fa-search-plus"></span
-                    ></CBadge>
+                  <router-link :to="{ path:`/sale/detail/${item.id_sale}`} ">
+
+                    <CBadge  color="success"> <span class="fa fa-search-plus "></span></CBadge>
+
                   </router-link>
+
+                 
+
                 </td>
               </template>
-              <template #action_delete="{ item }">
-                <td align="center" >
-                  <a href="#" v-if="item.status=='1'">
+                <template #action_delete="{ item }">
+                <td align="center">
+                
+               <a href="#" v-if="item.status=='1'">
                     <CBadge @click="delet(item.id_purchase)" color="danger"
                       > <span class="fa fa-ban"></span></CBadge
                   ></a>
@@ -164,7 +166,8 @@ export default {
   components: { CTableWrapper },
   data() {
     return {
-      arrayPurchases: [],
+      arraySales: []
+      
     };
   },
 
@@ -172,9 +175,11 @@ export default {
     ModelListSelect,
   },
   mounted() {
-    this.purchases();
+    this.sales();
   },
   methods: {
+  
+
     delet(id) {
       swal({
         title: "Eliminar",
@@ -187,9 +192,9 @@ export default {
           let me = this;
           me.id = id;
           axios
-            .delete("/auth/purchases/" + me.id)
+            .delete("/auth/sales/" + me.id)
             .then(function (response) {
-              me.purchases();
+              me.sales();
               swal("Correcto", response.data.message, "success");
             })
             .catch(function (error) {
@@ -200,12 +205,12 @@ export default {
       });
     },
 
-    purchases() {
+    sales() {
       let me = this;
       axios
-        .get("/auth/purchases")
+        .get("/auth/sales")
         .then(function (response) {
-          me.arrayPurchases = response.data.data;
+          me.arraySales = response.data.data;
           console.log(response);
         })
         .catch(function (error) {
@@ -245,4 +250,5 @@ export default {
   color: red;
   font-weight: bold;
 }
+
 </style>

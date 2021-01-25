@@ -8,7 +8,7 @@
               <CCol lg="10" sm="6">
                 <slot name="header">
                   <span class="fa fa-plus-circle"></span>
-                  Nueva compra</slot
+                  Nueva Venta</slot
                 >
               </CCol>
             </CRow>
@@ -21,7 +21,7 @@
                 <div class="">
                   <input
                     type="date"
-                    v-model="purchase.date"
+                    v-model="sale.date"
                     class="form-control form-control-sm"
                     placeholder="Nombre de producto"
                   />
@@ -29,13 +29,13 @@
               </div>
               <div class="form-group col-sm-12 col-md-6 col-lg-4">
                 <label class="form-control-label" for="email-input"
-                  >Proveedor</label
+                  >Cliente</label
                 >
                 <div class="">
                   <model-list-select
-                    :list="arrayProviders"
-                    v-model="provider"
-                    option-value="id_provider"
+                    :list="arrayClients"
+                    v-model="client"
+                    option-value="id_client"
                     option-text="name"
                     placeholder="Seleccione"
                     class="form-control form-control-sm"
@@ -49,7 +49,7 @@
                 >
                 <div class="">
                   <select
-                    v-model="purchase.type_doc"
+                    v-model="sale.type_doc"
                     placeholder="Seleccione"
                     class="select-search form-control form-control-sm"
                   >
@@ -66,7 +66,7 @@
                 <div class="">
                   <input
                     type="text"
-                    v-model="purchase.number_doc"
+                    v-model="sale.number_doc"
                     class="form-control form-control-sm"
                     placeholder="Número de documento "
                   />
@@ -80,7 +80,7 @@
                 <div class="">
                   <input
                     type="text"
-                    v-model="purchase.observation"
+                    v-model="sale.observation"
                     class="form-control form-control-sm"
                     placeholder="Observación a la compra"
                   />
@@ -127,9 +127,10 @@
                 <div class="">
                   <input
                     type="number"
-                    v-model="detail.price"
+                    v-model="product.price"
                     class="form-control form-control-sm"
                     min="0"
+                    disabled
                   />
                 </div>
               </div>
@@ -164,7 +165,8 @@
                     <th></th>
                     <th>Producto</th>
                     <th>Precio</th>
-                    <th>Cantidad</th>
+                    <th>Cant.</th>
+                    <th>Dscto.</th>
                     <th>Subtotal</th>
                   </tr>
                 </thead>
@@ -186,6 +188,7 @@
                         type="number"
                         min="0"
                         class="form-control form-control-sm text-right"
+                         disabled
                       />
                     </td>
                     <td>
@@ -195,8 +198,15 @@
                         class="form-control form-control-sm text-right"
                       />
                     </td>
+                    <td>
+                      <input
+                        v-model="d.discount"
+                        type="number"
+                        class="form-control form-control-sm text-right"
+                      />
+                    </td>
                     <td
-                      v-text="(d.quantity * d.price).toFixed(2)"
+                      v-text="((d.quantity * d.price)-d.discount).toFixed(2)"
                       class="text-right"
                     ></td>
                   </tr>
@@ -208,15 +218,15 @@
                   style="background-color: #3192a5"
                 >
                   <tr>
-                    <td colspan="4">Subtotal</td>
+                    <td colspan="5">Subtotal</td>
                     <td v-text="dato.subtotal"></td>
                   </tr>
                   <tr>
-                    <td colspan="4">Igv</td>
+                    <td colspan="5">Igv</td>
                     <td v-text="dato.igv" class=""></td>
                   </tr>
                   <tr>
-                    <td colspan="4">Total</td>
+                    <td colspan="5">Total</td>
                     <td v-text="dato.total" class=""></td>
                   </tr>
                 </tbody>
@@ -266,20 +276,21 @@ import { ModelListSelect } from "vue-search-select";
 import "vue-search-select/dist/VueSearchSelect.css";
 
 export default {
-  name: "addProvider",
+  name: "addSale",
   components: { CTableWrapper },
   data() {
     return {
       arrayProducts: [],
 
-      provider: { id_provider: "", name: "" },
+      client: { id_client: "", name: "" },
       product: { id_product: "", name: "" },
 
-      arrayProviders: [],
-      purchase: { date: "", type_doc: "", number_doc: "", observation: "" },
+      arrayClients: [],
+      sale: { date: "", type_doc: "", number_doc: "", observation: "" },
       detail: {
         quantity: "0",
-        price: "0",
+        price:'0',
+        discount:'0'
       },
       arrayDetail: [],
       modalRegistrar: false,
@@ -298,8 +309,8 @@ export default {
       var neto = 0;
       for (var i = 0; i < me.arrayDetail.length; i++) {
         var subtotal =
-          parseFloat(me.arrayDetail[i].price) *
-          parseInt(me.arrayDetail[i].quantity);
+          (parseFloat(me.arrayDetail[i].price) *
+          parseInt(me.arrayDetail[i].quantity))-me.arrayDetail[i].discount;
         neto = neto + subtotal;
       }
       var impuesto = (neto * 0.18) / (1 + 0.18);
@@ -317,7 +328,7 @@ export default {
   },
   mounted() {
     this.products();
-    this.providers();
+    this.clients();
   },
   methods: {
     addDetail() {
@@ -325,7 +336,7 @@ export default {
 
       if (
         me.detail.quantity < 1 ||
-        me.detail.price < 0.1 ||
+        me.product.price < 0.1 ||
         me.product.id_product == ""
       ) {
         swal({
@@ -352,7 +363,8 @@ export default {
         id_product: me.product.id_product,
         name: me.product.name,
         quantity: me.detail.quantity,
-        price: me.detail.price,
+        price: me.product.price,
+        discount:me.detail.discount
       });
       me.detail.quantity = 0;
       me.detail.price = 0;
@@ -387,12 +399,12 @@ export default {
           console.log(error);
         });
     },
-    providers() {
+    clients() {
       let me = this;
       axios
-        .get("/auth/providers")
+        .get("/auth/clients")
         .then(function (response) {
-          me.arrayProviders = response.data.data;
+          me.arrayClients = response.data.data;
           console.log(response);
         })
         .catch(function (error) {
@@ -418,16 +430,16 @@ export default {
       let me = this;
       let count = 0;
 
-      if (me.purchase.number_doc == "") {
+      if (me.sale.number_doc == "") {
         swal("Datos incompletos", "Ingrese un número de documento", "warning");
         count = 1;
       }
-      if (me.purchase.type_doc == "") {
+      if (me.sale.type_doc == "") {
         swal("Datos incompletos", "Ingrese un tipo de documento", "warning");
         count = 1;
       }
-      if (me.provider.id_provider == "") {
-        swal("Datos incompletos", "Seleccione una proveedor", "warning");
+      if (me.client.id_client == "") {
+        swal("Datos incompletos", "Seleccione un cliente", "warning");
         count = 1;
       }
 
@@ -446,24 +458,24 @@ export default {
       }
 
       axios
-        .post("/auth/purchases", {
-          date: me.purchase.date,
-          type_doc: me.purchase.type_doc,
-          number_doc: me.purchase.number_doc,
-          id_provider: me.provider.id_provider,
-          observation: me.purchase.observation,
+        .post("/auth/sales", {
+          date: me.sale.date,
+          type_doc: me.sale.type_doc,
+          number_doc: me.sale.number_doc,
+          id_client: me.client.id_client,
+          observation: me.sale.observation,
           id_storage: 1,
           details: me.arrayDetail,
         })
         .then(function (response) {
-          if (response) {
+           if (response) {
             swal("Correcto", response.data.message, "success");
           } else {
             swal("Error ", response.message, "error");
           }
         })
         .catch(function (error) {
-           console.log(error.response);
+          console.log(error.response);
           swal("Error ", error.response.data.message, "error");
         });
       me.modal = 0;
