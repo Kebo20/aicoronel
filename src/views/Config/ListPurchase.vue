@@ -113,9 +113,9 @@
             >
               <template #status="{ item }">
                 <td align="center">
-                  <CBadge :color="item.status='0'?'danger':'success'">{{
-                    item.status='0'?'Anulada':'Activa'
-                  }}</CBadge>
+                  <CBadge v-if="item.status=='1'" color='success'>Activo</CBadge>
+                  <CBadge v-else color='danger'>Anulada</CBadge>
+
                 </td>
               </template>
               <template #action_detail="{ item }">
