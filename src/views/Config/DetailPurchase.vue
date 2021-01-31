@@ -17,7 +17,7 @@
                     
                     <span class="fa fa-file-pdf"> </span>
                   </button>
-                  <button class="btn btn-primary">
+                  <button class="btn btn-primary" @click='excel'>
                     
                     <span class="fa fa-file-excel"> </span>
                   </button>
@@ -224,6 +224,20 @@ export default {
           console.log(error);
         });
     },
+
+    excel() {
+      let me = this;
+      axios
+        .get("/auth/purchases/export/" + me.id)
+        .then(function (response) {
+          console.log(response);
+          let url = response.data.data;
+          window.open(url);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
   },
 };
 </script>
