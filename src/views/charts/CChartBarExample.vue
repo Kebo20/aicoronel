@@ -15,9 +15,9 @@ export default {
     defaultDatasets () {
       return [
         {
-          label: 'GitHub Commits',
+          label: 'Compras',
           backgroundColor: '#f87979',
-          data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
+          data: [100, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
         }
       ]
     }

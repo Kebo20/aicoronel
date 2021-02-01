@@ -90,11 +90,29 @@
                 <label class="form-control-label" for="email-input"
                   >Tienda</label
                 >
-                <div class="">
+                <div class="" v-if="rol == '1'">
+                  <select
+                    v-model="sale.id_storage"
+                    placeholder="Seleccione"
+                    class="select-search form-control form-control-sm"
+                  >
+                    <option selected="true" value="1">Bagua</option>
+                    <option value="2">Bagua Chica</option>
+                  </select>
+                </div>
+                <div class="" v-if="rol == '2'">
                   <input
                     type="text"
                     class="form-control form-control-sm"
                     value="Bagua"
+                    readonly
+                  />
+                </div>
+                <div class="" v-if="rol == '3'">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    value="Bagua Grande"
                     readonly
                   />
                 </div>
@@ -188,7 +206,7 @@
                         type="number"
                         min="0"
                         class="form-control form-control-sm text-right"
-                         disabled
+                        disabled
                       />
                     </td>
                     <td>
@@ -206,7 +224,7 @@
                       />
                     </td>
                     <td
-                      v-text="((d.quantity * d.price)-d.discount).toFixed(2)"
+                      v-text="(d.quantity * d.price - d.discount).toFixed(2)"
                       class="text-right"
                     ></td>
                   </tr>
@@ -286,17 +304,24 @@ export default {
       product: { id_product: "", name: "" },
 
       arrayClients: [],
-      sale: { date: "", type_doc: "", number_doc: "", observation: "" },
+      sale: {
+        date: "",
+        type_doc: "FACTURA",
+        number_doc: "",
+        observation: "",
+        id_storage: "1",
+      },
       detail: {
         quantity: "0",
-        price:'0',
-        discount:'0'
+        price: "0",
+        discount: "0",
       },
       arrayDetail: [],
       modalRegistrar: false,
       modal: 0,
       accion: 1,
       id: "",
+      rol: this.$store.state.rol,
     };
   },
 
@@ -309,8 +334,9 @@ export default {
       var neto = 0;
       for (var i = 0; i < me.arrayDetail.length; i++) {
         var subtotal =
-          (parseFloat(me.arrayDetail[i].price) *
-          parseInt(me.arrayDetail[i].quantity))-me.arrayDetail[i].discount;
+          parseFloat(me.arrayDetail[i].price) *
+            parseInt(me.arrayDetail[i].quantity) -
+          me.arrayDetail[i].discount;
         neto = neto + subtotal;
       }
       var impuesto = (neto * 0.18) / (1 + 0.18);
@@ -329,6 +355,7 @@ export default {
   mounted() {
     this.products();
     this.clients();
+    let me = this;
   },
   methods: {
     addDetail() {
@@ -364,7 +391,7 @@ export default {
         name: me.product.name,
         quantity: me.detail.quantity,
         price: me.product.price,
-        discount:me.detail.discount
+        discount: me.detail.discount,
       });
       me.detail.quantity = 0;
       me.detail.price = 0;
@@ -378,8 +405,6 @@ export default {
       let me = this;
       me.product = { id_product: "", name: "" };
     },
-
-  
 
     closeModal(status, evt, accept) {
       if (accept) {
@@ -443,6 +468,11 @@ export default {
         count = 1;
       }
 
+      if (me.sale.id_storage == "" && rol == "1") {
+        swal("Datos incompletos", "Seleccione una tienda", "warning");
+        count = 1;
+      }
+
       if (me.arrayDetail.length == 0) {
         swal("Datos incompletos", "Ingrese productos a la lista", "warning");
         count = 1;
@@ -464,12 +494,13 @@ export default {
           number_doc: me.sale.number_doc,
           id_client: me.client.id_client,
           observation: me.sale.observation,
-          id_storage: 1,
+          id_storage: me.sale.id_storage,
           details: me.arrayDetail,
         })
         .then(function (response) {
-           if (response) {
+          if (response) {
             swal("Correcto", response.data.message, "success");
+            this.clear();
           } else {
             swal("Error ", response.message, "error");
           }
@@ -479,6 +510,24 @@ export default {
           swal("Error ", error.response.data.message, "error");
         });
       me.modal = 0;
+    },
+    clear() {
+      let me = this;
+      me.client = { id_client: "", name: "" };
+      me.product = { id_product: "", name: "" };
+      me.sale = {
+        date: "",
+        type_doc: "FACTURA",
+        number_doc: "",
+        observation: "",
+        id_storage: "1",
+      };
+      (me.detail = {
+        quantity: "0",
+        price: "0",
+        discount: "0",
+      }),
+        (me.arrayDetail = []);
     },
 
     validator(val) {

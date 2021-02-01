@@ -12,7 +12,7 @@
                 >
               </CCol>
 
-              <CCol lg="2" sm="6">
+              <CCol v-if='rol==1' lg="2" sm="6">
                 <CButton
                   color="primary"
                   @click="
@@ -39,23 +39,35 @@
               :border="true"
               :column-filter="true"
               caption="Lista de categorias"
-              :fields="[
-                'name',
-                
+              :fields="rol=='1'?[
+                {
+                  key: 'name',
+                  label: 'Descripción',
+                  _style: { width: '95%' },
+                  sorter: false,
+                  filter: true,
+                },
 
                 {
                   key: 'actions',
                   label: 'Acciones',
-                  _style: { width: '1%' },
-                  value: 'hola',
+                  _style: { width: '5%' },
                   sorter: false,
                   filter: true,
                 },
+              ]:[
+                {
+                  key: 'name',
+                  label: 'Descripción',
+                  _style: { width: '95%' },
+                  sorter: false,
+                  filter: true,
+                }
               ]"
               pagination
             >
-              <template #actions="{ item }">
-                <td align="center">
+              <template  #actions="{ item }">
+                <td align="center"  style="width:'5%'">
                   <button
                     href="#"
                     class="btn btn-sm"
@@ -71,7 +83,9 @@
                     <span class="fa fa-trash"></span>
                   </button>
                 </td>
+                
               </template>
+             
             </CDataTable>
           </CCardBody>
         </CCol>
@@ -102,24 +116,19 @@
             </button>
           </div>
           <div class="modal-body">
-          
-            
-
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input"
-                  >Descripción</label
-                >
-                <div class="col-md-9">
-                  <input
-                    type="text"
-                    v-model="category.name"
-                    class="form-control"
-                    placeholder="Nombre de categoría"
-                  />
-                </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input"
+                >Descripción</label
+              >
+              <div class="col-md-9">
+                <input
+                  type="text"
+                  v-model="category.name"
+                  class="form-control"
+                  placeholder="Nombre de categoría"
+                />
               </div>
-   
-            
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" @click="modal = 0">
@@ -165,26 +174,23 @@ export default {
     return {
       arrayCategories: [],
       category: {
-        name: ""
-       
+        name: "",
       },
       modalRegistrar: false,
       modal: 0,
       accion: 1,
       id: "",
-     
+      rol:this.$store.state.rol
     };
   },
   mounted() {
     this.categories();
   },
   methods: {
-   
- clean() {
-      
+    clean() {
       let me = this;
       me.category = {
-        name: ""
+        name: "",
       };
     },
     edit(id) {
@@ -193,10 +199,8 @@ export default {
       let me = this;
       me.accion = 2;
       me.id = id;
-     
+
       me.modal = 1;
-     
-      
     },
     delet(id) {
       swal({
@@ -213,10 +217,15 @@ export default {
             .delete("/auth/categories/" + me.id)
             .then(function (response) {
               me.categories();
-              swal("Correcto", response.data.message, "success");
+              if (response) {
+                swal("Correcto", response.data.message, "success");
+              } else {
+                swal("Error ", response.message, "error");
+              }
             })
             .catch(function (error) {
-              swal("Error ", error.message, "error");
+              console.log(error);
+              swal("Error ", error.response.data.message, "error");
             });
         }
       });
@@ -256,10 +265,10 @@ export default {
 
     validate() {
       let me = this;
-   let count=0
+      let count = 0;
       if (me.category.name == "") {
         swal("Datos incompletos", "Ingrese un nombre", "warning");
-         count=1;
+        count = 1;
       }
 
       return count;
@@ -267,39 +276,44 @@ export default {
 
     save() {
       let me = this;
-      if (this.validate()>0) {
+      if (this.validate() > 0) {
         return false;
+      }
 
-      }    
-      
-      
       if (me.accion == 1) {
         axios
           .post("/auth/categories", {
-            name: me.category.name
-           
+            name: me.category.name,
           })
           .then(function (response) {
             me.categories();
-            swal("Correcto", response.data.message, "success");
+            if (response) {
+              swal("Correcto", response.data.message, "success");
+            } else {
+              swal("Error ", response.message, "error");
+            }
           })
           .catch(function (error) {
-             console.log(error.response);
-          swal("Error ", error.response.data.message, "error");
+            console.log(error.response);
+            swal("Error ", error.response.data.message, "error");
           });
         me.modal = 0;
       } else {
         axios
           .put("/auth/categories/" + me.id, {
-            name: me.category.name
+            name: me.category.name,
           })
           .then(function (response) {
             me.categories();
-            swal("Correcto", response.data.message, "success");
+            if (response) {
+              swal("Correcto", response.data.message, "success");
+            } else {
+              swal("Error ", response.message, "error");
+            }
           })
           .catch(function (error) {
             console.log(error.response);
-          swal("Error ", error.response.data.message, "error");
+            swal("Error ", error.response.data.message, "error");
           });
 
         me.modal = 0;

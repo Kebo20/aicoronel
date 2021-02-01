@@ -76,15 +76,17 @@ export default {
       let config = {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
-          Authorization: "Bearer " + localStorage.getItem("token"),
+          Authorization: "Bearer " + me.$store.state.token,
         },
       };
       axios
         .get("http://aicoronel-backend/api/auth/logout", config)
         .then(function (response) {
           console.log(response);
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
+            me.$store.commit('user', '')
+            me.$store.commit('rol', '')
+            me.$store.commit('token', '')
+
 
           me.$router.push("/login");
         })

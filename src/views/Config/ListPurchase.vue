@@ -83,6 +83,13 @@
                   sorter: false,
                   filter: true,
                 },
+                {
+                  key: 'storage_name',
+                  label: 'Tienda',
+                  _style: { width: '20%' },
+                  sorter: false,
+                  filter: true,
+                },
                  {
                   key: 'status',
                   label: 'Estado',

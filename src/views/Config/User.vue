@@ -61,7 +61,6 @@
                   sorter: false,
                   filter: true,
                 },
-               
 
                 {
                   key: 'actions',
@@ -76,18 +75,10 @@
             >
               <template #actions="{ item }">
                 <td align="center">
-                  <button
-                    href="#"
-                    class="btn btn-sm"
-                    @click="edit(item.id)"
-                  >
+                  <button href="#" class="btn btn-sm" @click="edit(item.id)">
                     <span class="fa fa-edit"></span>
                   </button>
-                  <button
-                    href="#"
-                    class="btn btn-sm"
-                    @click="delet(item.id)"
-                  >
+                  <button href="#" class="btn btn-sm" @click="delet(item.id)">
                     <span class="fa fa-trash"></span>
                   </button>
                 </td>
@@ -140,7 +131,6 @@
                 >Rol</label
               >
               <div class="col-md-9">
-           
                 <model-list-select
                   :list="arrayRoles"
                   v-model="rol"
@@ -171,16 +161,14 @@
               <div class="col-md-9">
                 <input
                   type="text"
-                  v-model="user.password"
+                  v-model="password"
                   class="form-control"
                   placeholder="Ingrese una contraseña"
                 />
               </div>
             </div>
-
-            
-            </div>
           </div>
+
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" @click="modal = 0">
               Cerrar
@@ -208,6 +196,7 @@
       <!-- /.modal-dialog -->
     </div>
     <!--Fin del modal-->
+  </div>
 </template>
 
 <script>
@@ -221,7 +210,7 @@ import { ModelListSelect } from "vue-search-select";
 import "vue-search-select/dist/VueSearchSelect.css";
 
 export default {
-  name: "Tables",
+  name: "user",
   components: { CTableWrapper },
   data() {
     return {
@@ -239,6 +228,7 @@ export default {
       modal: 0,
       accion: 1,
       id: "",
+      password:''
     };
   },
 
@@ -248,6 +238,7 @@ export default {
   mounted() {
     this.users();
     this.roles();
+      
   },
   methods: {
     clean() {
@@ -284,10 +275,14 @@ export default {
             .delete("/auth/users/" + me.id)
             .then(function (response) {
               me.users();
-              swal("Correcto", response.data.message, "success");
+              if (response) {
+                swal("Correcto", response.data.message, "success");
+              } else {
+                swal("Error ", response.message, "error");
+              }
             })
             .catch(function (error) {
-              swal("Error ", error.message, "error");
+              swal("Error ", error.response.data.message, "error");
             });
         }
       });
@@ -372,15 +367,19 @@ export default {
             name: me.user.name,
             email: me.user.email,
             id_role: me.rol.id_role,
-            password: me.user.password,
+            password: me.password,
           })
           .then(function (response) {
             me.users();
-            swal("Correcto", response.data.message, "success");
+            if (response) {
+              swal("Correcto", response.data.message, "success");
+            } else {
+              swal("Error ", response.message, "error");
+            }
           })
           .catch(function (error) {
-             console.log(error.response);
-          swal("Error ", error.response.data.message, "error");
+            console.log(error.response);
+            swal("Error ", error.response.data.message, "error");
           });
         me.modal = 0;
       } else {
@@ -389,15 +388,19 @@ export default {
             name: me.user.name,
             email: me.user.email,
             id_role: me.rol.id_role,
-            password: me.user.password,
+            password: me.password,
           })
           .then(function (response) {
             me.users();
-            swal("Correcto", response.data.message, "success");
+            if (response) {
+              swal("Correcto", response.data.message, "success");
+            } else {
+              swal("Error ", response.message, "error");
+            }
           })
           .catch(function (error) {
-             console.log(error.response);
-          swal("Error ", error.response.data.message, "error");
+            console.log(error.response);
+            swal("Error ", error.response.data.message, "error");
           });
 
         me.modal = 0;

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../store'
 
 // Containers
 const TheContainer = () => import('@/containers/TheContainer')
@@ -16,10 +17,18 @@ const Login = () => import('@/views/Login/Login')
 const AddPurchase = () => import('@/views/Config/AddPurchase')
 const ListPurchase = () => import('@/views/Config/ListPurchase')
 const DetailPurchase = () => import('@/views/Config/DetailPurchase')
+const ReportPurchase = () => import('@/views/Config/ReportPurchase')
+
 
 const AddSale = () => import('@/views/Config/AddSale')
 const ListSale = () => import('@/views/Config/ListSale')
 const DetailSale = () => import('@/views/Config/DetailSale')
+const ReportSale = () => import('@/views/Config/ReportSale')
+
+
+
+const P404 = () => import('@/views/errors/Page404')
+
 
 
 const Colors = () => import('@/views/theme/Colors')
@@ -113,7 +122,16 @@ const router = new Router({
         {
           path: 'user',
           name: 'Usuarios',
-          component: User
+          component: User,
+          beforeEnter:(to, from, next) => {
+           let rol=store.state.rol
+           if(rol==1){
+            next()
+          }else{
+             next("/404")
+           }
+          
+          }
         },
         {
           path: 'product',
@@ -162,6 +180,12 @@ const router = new Router({
               name: 'Detalle de compra',
               component: DetailPurchase
             }
+            ,
+            {
+              path: 'reports',
+              name: 'Reportes ',
+              component: ReportPurchase
+            }
     
           ]
         },
@@ -188,6 +212,11 @@ const router = new Router({
               path: 'detail/:id',
               name: 'Detalle de venta',
               component: DetailSale
+            },
+            {
+              path: 'reports',
+              name: 'Reportes ',
+              component: ReportSale
             }
     
           ]
@@ -452,7 +481,7 @@ const router = new Router({
     },
     {
       path: "/404",
-      redirect: "/pages/404"
+      component: P404
     }
   ]
 
@@ -460,14 +489,15 @@ const router = new Router({
 
 //VALIDAR SESIÓN EN RUTAS
 router.beforeEach((to, from, next) => {
+  let token=store.state.token
   if (to.path != '/login') { //para otras rutas
-    if (localStorage.getItem('token')) {
+    if (token!='') {
       next()
     } else {
       next('/login')
     }
   } else { //para /login
-    if (localStorage.getItem('token')) {
+    if (token!='') {
       next('/')
     } else {
       next();

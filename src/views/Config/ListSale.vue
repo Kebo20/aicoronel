@@ -61,6 +61,13 @@
                   filter: true,
                 },
                 {
+                  key: 'discount',
+                  label: 'Dscto.',
+                  _style: { width: '10%' },
+                  sorter: false,
+                  filter: true,
+                },
+                {
                   key: 'subtotal',
                   label: 'Subtotal(S/.)',
                   _style: { width: '20%' },
@@ -78,6 +85,13 @@
                 {
                   key: 'total',
                   label: 'Total(S/.)',
+                  _style: { width: '20%' },
+                  sorter: false,
+                  filter: true,
+                },
+                 {
+                  key: 'storage_name',
+                  label: 'Tienda',
                   _style: { width: '20%' },
                   sorter: false,
                   filter: true,

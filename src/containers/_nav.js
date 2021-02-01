@@ -1,3 +1,5 @@
+import store from '../store'
+
 export default [
   {
     _name: 'CSidebarNav',
@@ -22,12 +24,13 @@ export default [
         to: '/provider',
         icon: 'cil-drop'
       },
+      store.state.rol===1?
       {
         _name: 'CSidebarNavItem',
         name: 'Usuarios',
         to: '/user',
         icon: 'cil-drop'
-      },
+      }:'',
       {
         _name: 'CSidebarNavItem',
         name: 'Clientes',
@@ -86,7 +89,7 @@ export default [
           },
           {
             name: 'Reportes',
-            to: '/report-purchase'
+            to: '/purchase/reports'
           }
         ]
       },
@@ -106,7 +109,7 @@ export default [
           },
           {
             name: 'Reportes',
-            to: '/sale/report'
+            to: '/sale/reports'
           }
         ]
       },

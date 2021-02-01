@@ -12,7 +12,7 @@
                 >
               </CCol>
 
-              <CCol lg="2" sm="6">
+              <CCol v-if="rol =='1'" lg="2" sm="6">
                 <CButton
                   color="primary"
                   @click="
@@ -39,22 +39,93 @@
               :border="true"
               :column-filter="true"
               caption="Lista de clientes"
-              :fields="[
-                'name',
-                'number_doc',
-                'email',
-                'address',
-                'phone',
-
-                {
-                  key: 'actions',
-                  label: 'Acciones',
-                  _style: { width: '1%' },
-                  value: 'hola',
-                  sorter: false,
-                  filter: true,
-                },
-              ]"
+              :fields="
+                rol == '1'
+                  ? [
+                      {
+                        key: 'name',
+                        label: 'Nombre',
+                        _style: { width: '1%' },
+                        sorter: false,
+                        filter: true,
+                      },
+                      {
+                        key: 'number_doc',
+                        label: 'N° de documento',
+                        _style: { width: '1%' },
+                        sorter: false,
+                        filter: true,
+                      },
+                      {
+                        key: 'email',
+                        label: 'Correo',
+                        _style: { width: '1%' },
+                        sorter: false,
+                        filter: true,
+                      },
+                      {
+                        key: 'address',
+                        label: 'Dirección',
+                        _style: { width: '1%' },
+                        sorter: false,
+                        filter: true,
+                      },
+                      {
+                        key: 'phone',
+                        label: 'Teléfono',
+                        _style: { width: '1%' },
+                        value: 'hola',
+                        sorter: false,
+                        filter: true,
+                      },
+                      {
+                        key: 'actions',
+                        label: 'Acciones',
+                        _style: { width: '1%' },
+                        value: 'hola',
+                        sorter: false,
+                        filter: true,
+                      },
+                    ]
+                  : [
+                      {
+                        key: 'name',
+                        label: 'Nombre',
+                        _style: { width: '1%' },
+                        sorter: false,
+                        filter: true,
+                      },
+                      {
+                        key: 'number_doc',
+                        label: 'N° de documento',
+                        _style: { width: '1%' },
+                        sorter: false,
+                        filter: true,
+                      },
+                      {
+                        key: 'email',
+                        label: 'Correo',
+                        _style: { width: '1%' },
+                        sorter: false,
+                        filter: true,
+                      },
+                      {
+                        key: 'address',
+                        label: 'Dirección',
+                        _style: { width: '1%' },
+                        sorter: false,
+                        filter: true,
+                      },
+                      {
+                        key: 'phone',
+                        label: 'Teléfono',
+                        _style: { width: '1%' },
+                        value: 'hola',
+                        sorter: false,
+                        filter: true,
+                      }
+                    ]
+              "
               pagination
             >
               <template #actions="{ item }">
@@ -248,6 +319,7 @@ export default {
       id: "",
       search: "",
       arrayErrors: [],
+      rol:this.$store.state.rol
     };
   },
   mounted() {

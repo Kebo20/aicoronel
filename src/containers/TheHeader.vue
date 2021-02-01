@@ -16,7 +16,7 @@
     </CHeaderBrand>
     <CHeaderNav class="d-md-down-none mr-auto">
       <CHeaderNavItem class="px-3">
-        <CHeaderNavLink exact>{{ user }}</CHeaderNavLink>
+        <CHeaderNavLink exact>{{ $store.state.user }}</CHeaderNavLink>
 
         <CHeaderNavLink> </CHeaderNavLink>
       </CHeaderNavItem>

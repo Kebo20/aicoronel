@@ -12,7 +12,7 @@
                 >
               </CCol>
 
-              <CCol lg="2" sm="6">
+              <CCol v-if="rol =='1'" lg="2" sm="6">
                 <CButton
                   color="primary"
                   @click="
@@ -39,7 +39,7 @@
               :border="true"
               :column-filter="true"
               caption="Lista de productos"
-              :fields="[
+              :fields="rol=='1'?[
                 {
                   key: 'name',
                   label: 'Nombre',
@@ -84,11 +84,47 @@
                   sorter: false,
                   filter: false,
                 },
+              ]:[
+                {
+                  key: 'name',
+                  label: 'Nombre',
+                  _style: { width: '20%' },
+                  sorter: false,
+                  filter: true,
+                },
+                {
+                  key: 'category_name',
+                  label: 'Categoría',
+                  _style: { width: '20%' },
+                  sorter: false,
+                  filter: true,
+                },
+                {
+                  key: 'brand',
+                  label: 'Marca',
+                  _style: { width: '20%' },
+                  sorter: false,
+                  filter: true,
+                },
+                {
+                  key: 'price',
+                  label: 'Precio',
+                  _style: { width: '20%' },
+                  sorter: false,
+                  filter: true,
+                },
+                {
+                  key: 'units',
+                  label: 'Unidad',
+                  _style: { width: '20%' },
+                  sorter: false,
+                  filter: true,
+                }
               ]"
               pagination
             >
               <template #actions="{ item }">
-                <td align="center">
+                <td   align="center">
                   <button
                     href="#"
                     class="btn btn-sm"
@@ -104,7 +140,9 @@
                     <span class="fa fa-trash"></span>
                   </button>
                 </td>
+               
               </template>
+             
             </CDataTable>
           </CCardBody>
         </CCol>
@@ -266,7 +304,7 @@ export default {
         units: "",
         id_category: "",
       },
-      category: {id_category:'',name:''},
+      category: { id_category: "", name: "" },
       arrayCategories: [],
       modalRegistrar: false,
       modal: 0,
@@ -274,6 +312,7 @@ export default {
       id: "",
       search: "",
       arrayErrors: [],
+rol:this.$store.state.rol
     };
   },
 
@@ -318,11 +357,17 @@ export default {
           axios
             .delete("/auth/products/" + me.id)
             .then(function (response) {
-              me.products();
-              swal("Correcto", response.data.message, "success");
+              console.log(response)
+              if (response) {
+                swal("Correcto", response.data.message, "success");
+                me.products();
+              } else {
+                swal("Error ", response.message, "error");
+              }
             })
             .catch(function (error) {
-              swal("Error ", error.message, "error");
+              console.log(error.response)
+              swal("Error",error.response.data.message, "error");
             });
         }
       });
@@ -359,14 +404,13 @@ export default {
         });
     },
 
-
     getProduct(id) {
       let me = this;
       axios
         .get("/auth/products/" + id)
         .then(function (response) {
           me.product = response.data.data;
-       
+
           me.category = { id_category: me.product.id_category };
         })
         .catch(function (error) {
@@ -376,19 +420,19 @@ export default {
 
     validate() {
       let me = this;
-         let count=0
+      let count = 0;
 
       if (me.product.name == "") {
         swal("Datos incompletos", "Ingrese un nombre", "warning");
-          count=1;
+        count = 1;
       }
       if (me.product.price == "") {
         swal("Datos incompletos", "Ingrese el precio del producto", "warning");
-       count=1;
+        count = 1;
       }
       if (me.category.id_category == "") {
         swal("Datos incompletos", "Seleccione una categoría", "warning");
-       count=1;
+        count = 1;
       }
 
       return count;
@@ -396,10 +440,9 @@ export default {
 
     save() {
       let me = this;
-    if (this.validate()>0) {
+      if (this.validate() > 0) {
         return false;
-
-      }    
+      }
       if (me.accion == 1) {
         axios
           .post("/auth/products", {
@@ -411,11 +454,15 @@ export default {
           })
           .then(function (response) {
             me.products();
-            swal("Correcto", response.data.message, "success");
+            if (response) {
+              swal("Correcto", response.data.message, "success");
+            } else {
+              swal("Error ", response.message, "error");
+            }
           })
           .catch(function (error) {
-             console.log(error.response);
-          swal("Error ", error.response.data.message, "error");
+            console.log(error.response);
+            swal("Error ", error.response.data.message, "error");
           });
         me.modal = 0;
       } else {
@@ -429,11 +476,15 @@ export default {
           })
           .then(function (response) {
             me.products();
-            swal("Correcto", response.data.message, "success");
+            if (response) {
+              swal("Correcto", response.data.message, "success");
+            } else {
+              swal("Error ", response.message, "error");
+            }
           })
           .catch(function (error) {
-             console.log(error.response);
-          swal("Error ", error.response.data.message, "error");
+            console.log(error.response);
+            swal("Error ", error.response.data.message, "error");
           });
 
         me.modal = 0;

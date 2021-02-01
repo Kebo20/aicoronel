@@ -72,8 +72,8 @@
 <script>
 import axios from "../../Config/axios";
 import "@fortawesome/fontawesome-free/js/all.js";
-import router from "../../router/index.js";
 import swal from "sweetalert";
+//import store from '../../store'
 
 export default {
   name: "Tables",
@@ -88,10 +88,8 @@ export default {
     };
   },
   mounted() {
-    if (localStorage.getItem("user") != null) {
-    } else {
-      //  window.location = "/";
-    }
+    let me=this
+   console.log(me.$store.state.token)
   },
   methods: {
     // DATATABLE
@@ -119,19 +117,25 @@ export default {
           remember_me: false,
         })
         .then(function (response) {
-          console.log(response);
-          me.user = response.data.user;
-          localStorage.setItem("token", response.data.access_token);
-          localStorage.setItem("user", response.data.user);
-          swal("Bienvenido", me.user, "success");
-          me.$router.push("/");
-          axios.defaults.headers.common["Authorization"] =
-            "Bearer " + response.data.access_token;
-          Vue.prototype.$user = response.data.user;
+          if (response) {
+            me.user = response.data.user;
+            me.$store.commit('user', response.data.user)
+            me.$store.commit('rol', response.data.rol)
+            me.$store.commit('token', response.data.access_token)
+
+
+            
+
+            swal("Bienvenido", me.$store.state.user, "success");
+            me.$router.push("/");
+            axios.defaults.headers.common["Authorization"] =
+              "Bearer " + response.data.access_token;
+          } else {
+            swal("Bienvenido", response.message, "success");
+          }
         })
         .catch(function (error) {
-          console.log(error.message);
-          //swal("Error", "Usuario o contraseña incorrectas", "warning");
+          swal("Error ", error.message, "error");
         });
     },
 

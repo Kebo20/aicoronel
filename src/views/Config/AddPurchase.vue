@@ -90,11 +90,29 @@
                 <label class="form-control-label" for="email-input"
                   >Tienda</label
                 >
-                <div class="">
+                <div class="" v-if="rol == '1'">
+                  <select
+                    v-model="purchase.id_storage"
+                    placeholder="Seleccione"
+                    class="select-search form-control form-control-sm"
+                  >
+                    <option selected="true" value="1">Bagua</option>
+                    <option value="2">Bagua Chica</option>
+                  </select>
+                </div>
+                <div class="" v-if="rol == '2'">
                   <input
                     type="text"
                     class="form-control form-control-sm"
                     value="Bagua"
+                    readonly
+                  />
+                </div>
+                <div class="" v-if="rol == '3'">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    value="Bagua Chica"
                     readonly
                   />
                 </div>
@@ -276,7 +294,7 @@ export default {
       product: { id_product: "", name: "" },
 
       arrayProviders: [],
-      purchase: { date: "", type_doc: "", number_doc: "", observation: "" },
+      purchase: { date: "", type_doc: "FACTURA", number_doc: "", observation: "",id_storage:'1' },
       detail: {
         quantity: "0",
         price: "0",
@@ -286,7 +304,7 @@ export default {
       modal: 0,
       accion: 1,
       id: "",
-    };
+rol:this.$store.state.rol    };
   },
 
   components: {
@@ -318,6 +336,7 @@ export default {
   mounted() {
     this.products();
     this.providers();
+
   },
   methods: {
     addDetail() {
@@ -366,8 +385,6 @@ export default {
       let me = this;
       me.product = { id_product: "", name: "" };
     },
-
-  
 
     closeModal(status, evt, accept) {
       if (accept) {
@@ -431,6 +448,11 @@ export default {
         count = 1;
       }
 
+       if (me.provider.id_storage == ""&& rol=='1') {
+        swal("Datos incompletos", "Seleccione una tienda", "warning");
+        count = 1;
+      }
+
       if (me.arrayDetail.length == 0) {
         swal("Datos incompletos", "Ingrese productos a la lista", "warning");
         count = 1;
@@ -452,21 +474,35 @@ export default {
           number_doc: me.purchase.number_doc,
           id_provider: me.provider.id_provider,
           observation: me.purchase.observation,
-          id_storage: 1,
+          id_storage: me.purchase.id_storage,
           details: me.arrayDetail,
         })
         .then(function (response) {
           if (response) {
             swal("Correcto", response.data.message, "success");
+            this.clear()
           } else {
             swal("Error ", response.message, "error");
           }
         })
         .catch(function (error) {
-           console.log(error.response);
+          console.log(error.response);
           swal("Error ", error.response.data.message, "error");
         });
       me.modal = 0;
+    },
+
+
+    clear() {
+      let me = this;
+      me.provider= { id_provider: "", name: "" },
+      me.product= { id_product: "", name: "" },
+      me.purchase= { date: "", type_doc: "FACTURA", number_doc: "", observation: "",id_storage:'1' }
+      me.detail= {
+        quantity: "0",
+        price: "0",
+      },
+      me.arrayDetail= []
     },
 
     validator(val) {
