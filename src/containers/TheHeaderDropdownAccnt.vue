@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "../Config/axios";
 import router from "../router/index.js";
 
 export default {
@@ -73,14 +73,9 @@ export default {
   methods: {
     logout() {
       let me = this;
-      let config = {
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-          Authorization: "Bearer " + me.$store.state.token,
-        },
-      };
+     
       axios
-        .get("http://aicoronel-backend/api/auth/logout", config)
+        .get("/auth/logout")
         .then(function (response) {
           console.log(response);
             me.$store.commit('user', '')
