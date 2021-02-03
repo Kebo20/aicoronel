@@ -25,6 +25,7 @@ const ListSale = () => import('@/views/Config/ListSale')
 const DetailSale = () => import('@/views/Config/DetailSale')
 const ReportSale = () => import('@/views/Config/ReportSale')
 
+const Storage = () => import('@/views/Config/Storage')
 
 
 const P404 = () => import('@/views/errors/Page404')
@@ -154,6 +155,11 @@ const router = new Router({
             }
     
           ]
+        },
+        {
+          path: 'storage',
+          name:'Almacén',
+          component: Storage
         },
 
         {

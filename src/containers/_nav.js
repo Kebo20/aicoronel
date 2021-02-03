@@ -94,6 +94,12 @@ export default [
         ]
       },
       {
+        _name: 'CSidebarNavItem',
+        name: 'Almacén',
+        to: '/storage',
+        icon: 'cil-drop'
+      },
+      {
         _name: 'CSidebarNavDropdown',
         name: 'Ventas',
         route: '/sale',
