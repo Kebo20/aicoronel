@@ -147,7 +147,7 @@
                 <td align="center">
                 
                <a href="#" v-if="item.status=='1'">
-                    <CBadge @click="delet(item.id_purchase)" color="danger"
+                    <CBadge @click="delet(item.id_sale)" color="danger"
                       > <span class="fa fa-ban"></span></CBadge
                   ></a>
                   <a href="#" v-else>
@@ -169,14 +169,13 @@ import axios from "../../Config/axios";
 import "@fortawesome/fontawesome-free/js/all.js";
 import swal from "sweetalert";
 
-import CTableWrapper from "./Table.vue";
 
 import { ModelListSelect } from "vue-search-select";
 import "vue-search-select/dist/VueSearchSelect.css";
 
 export default {
-  name: "Tables",
-  components: { CTableWrapper },
+  name: "ListSale",
+  components: {  },
   data() {
     return {
       arraySales: []

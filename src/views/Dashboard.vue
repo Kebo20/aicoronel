@@ -1,7 +1,44 @@
 <template>
   <div>
-    <WidgetsDropdown />
-    <CCard>
+    <CCardGroup class="mb-4">
+      <CWidgetProgressIcon
+        :header="total_providers"
+        text="Proveedores"
+        color="gradient-info"
+        inverse
+        :value="total_providers"
+      >
+        <CIcon name="cil-people" height="36" />
+      </CWidgetProgressIcon>
+      <CWidgetProgressIcon
+        :header="total_clients"
+        text="Clientes"
+        color="gradient-success"
+        inverse
+        :value="total_clients"
+      >
+        <CIcon name="cil-userFollow" height="36" />
+      </CWidgetProgressIcon>
+      <CWidgetProgressIcon
+        :header="total_purchases"
+        text="Compras"
+        color="gradient-warning"
+        inverse
+        :value="total_purchases"
+      >
+        <CIcon name="cil-basket" height="36" />
+      </CWidgetProgressIcon>
+      <CWidgetProgressIcon
+        :header="total_sales"
+        text="Ventas"
+        color="gradient-primary"
+        inverse
+        :valor="total_sales"
+      >
+        <CIcon name="cil-chartPie" height="36" />
+      </CWidgetProgressIcon>
+    </CCardGroup>
+    <!-- <CCard>
       <CCardBody>
         <CRow>
           <CCol sm="5">
@@ -78,14 +115,14 @@
           </CCol>
         </CRow>
       </CCardFooter>
-    </CCard>
-    <WidgetsBrand />
+    </CCard> -->
+
     <CCard>
       <CCardBody>
         <CRow>
-          <CCol>
-            <!-- <CChartBar :months="['Enero','Febrero']" :datasets="purchasesDatasets" labels="months" /> -->
-          </CCol>
+          <CCol> <line-chart :data="getPurchases"></line-chart> </CCol>
+          <CCol> <line-chart :data="getSales"></line-chart> </CCol>
+
         </CRow>
       </CCardBody>
     </CCard>
@@ -93,14 +130,15 @@
       <CCardBody>
         <CRow>
           <CCol>
-            <!-- <CChartBar :datasets="salesDatasets" labels="months" /> -->
             <column-chart :data="getPurchases"></column-chart>
-            <line-chart :data="getPurchases"></line-chart>
+          </CCol>
+            <CCol>
+            <column-chart :data="getSales"></column-chart>
           </CCol>
         </CRow>
       </CCardBody>
     </CCard>
-    <CRow>
+    <!-- <CRow>
       <CCol md="12">
         <CCard>
           <CCardHeader> Traffic &amp; Sales </CCardHeader>
@@ -111,7 +149,7 @@
                   <CCol sm="6">
                     <CCallout color="info">
                       <small class="text-muted">New Clients</small><br />
-                      <strong class="h4">9,123</strong>
+                      <strong class="h4">{{total_clients}}</strong>
                     </CCallout>
                   </CCol>
                   <CCol sm="6">
@@ -385,32 +423,34 @@
           </CCardBody>
         </CCard>
       </CCol>
-    </CRow>
+    </CRow> -->
   </div>
 </template>
 
 <script>
-import MainChartExample from "./charts/MainChartExample";
-import WidgetsDropdown from "./widgets/WidgetsDropdown";
-import WidgetsBrand from "./widgets/WidgetsBrand";
-import { CChartBar } from "@coreui/vue-chartjs";
+
 import axios from "../Config/axios";
 
 export default {
   name: "Dashboard",
-  components: {
-    MainChartExample,
-    WidgetsDropdown,
-    WidgetsBrand,
-    CChartBar,
-  },
+
   mounted() {
     this.purchases();
+    this.sales();
+    this.providers();
+    this.clients();
+    this.totalPurchases();
+    this.totalSales();
   },
   data() {
     return {
       total_purchases_month: [],
       total_sales_month: [],
+      total_providers: 0,
+      total_clients: 0,
+      total_purchases: 0,
+      total_sales: 0,
+
       detail: [],
       id_storage: 1,
       selected: "Month",
@@ -517,6 +557,39 @@ export default {
           console.log(error);
         });
     },
+    totalPurchases() {
+      let me = this;
+      axios
+        .post("/auth/purchases/count", { id_storage: me.id_storage })
+        .then(function (response) {
+          me.total_purchases = response.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    providers() {
+      let me = this;
+      axios
+        .post("/auth/providers/count", { id_storage: me.id_storage })
+        .then(function (response) {
+          me.total_providers = response.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    clients() {
+      let me = this;
+      axios
+        .post("/auth/clients/count", { id_storage: me.id_storage })
+        .then(function (response) {
+          me.total_clients = response.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
     sales() {
       let me = this;
       axios
@@ -524,6 +597,17 @@ export default {
         .then(function (response) {
           me.total_sales_month = response.data.data;
           console.log(response.data.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    totalSales() {
+      let me = this;
+      axios
+        .post("/auth/sales/count", { id_storage: me.id_storage })
+        .then(function (response) {
+          me.total_sales = response.data;
         })
         .catch(function (error) {
           console.log(error);
@@ -540,17 +624,31 @@ export default {
       });
       return me.total_purchases_month;
     },
-    purchasesDatasets() {
+     getSales() {
+      let me = this;
+      me.total_sales_month.map((valor, index) => {
+        let date = valor.date;
+        let total = valor.total;
+        me.total_sales_month[index] = [date, total];
+      });
+      return me.total_sales_month;
+    },
+    getProviders() {
       let me = this;
 
-      return [
-        {
-          label: "Compras",
-          backgroundColor: "#4FA7DC",
-          data: me.total_purchases_month,
-        },
-      ];
+      return me.total_providers;
     },
+    // purchasesDatasets() {
+    //   let me = this;
+
+    //   return [
+    //     {
+    //       label: "Compras",
+    //       backgroundColor: "#4FA7DC",
+    //       data: me.total_purchases_month,
+    //     },
+    //   ];
+    // },
     // salesDatasets() {
     //   let me=this
     //   return [

@@ -278,14 +278,13 @@ import axios from "../../Config/axios";
 import "@fortawesome/fontawesome-free/js/all.js";
 import swal from "sweetalert";
 
-import CTableWrapper from "./Table.vue";
 
 import { ModelListSelect } from "vue-search-select";
 import "vue-search-select/dist/VueSearchSelect.css";
 
 export default {
   name: "addProvider",
-  components: { CTableWrapper },
+  components: {  },
   data() {
     return {
       arrayProducts: [],
@@ -480,7 +479,7 @@ rol:this.$store.state.rol    };
         .then(function (response) {
           if (response) {
             swal("Correcto", response.data.message, "success");
-            this.clear()
+            me.clear()
           } else {
             swal("Error ", response.message, "error");
           }
@@ -494,6 +493,7 @@ rol:this.$store.state.rol    };
 
 
     clear() {
+      
       let me = this;
       me.provider= { id_provider: "", name: "" },
       me.product= { id_product: "", name: "" },

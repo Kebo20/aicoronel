@@ -165,11 +165,10 @@ import axios from "../../Config/axios";
 import "@fortawesome/fontawesome-free/js/all.js";
 import swal from "sweetalert";
 
-import CTableWrapper from "./Table.vue";
 
 export default {
   name: "Tables",
-  components: { CTableWrapper },
+  components: {  },
   data() {
     return {
       arrayCategories: [],

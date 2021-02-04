@@ -172,16 +172,14 @@
 <script>
 import axios from "../../Config/axios";
 import "@fortawesome/fontawesome-free/js/all.js";
-import swal from "sweetalert";
 
-import CTableWrapper from "./Table.vue";
 
 import { ModelListSelect } from "vue-search-select";
 import "vue-search-select/dist/VueSearchSelect.css";
 
 export default {
   name: "addProvider",
-  components: { CTableWrapper },
+  components: {  },
   data() {
     return {
       purchase: {},

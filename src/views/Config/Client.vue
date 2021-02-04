@@ -297,7 +297,6 @@ import "@fortawesome/fontawesome-free/js/all.js";
 import swal from "sweetalert";
 
 import CTableWrapper from "./Table.vue";
-import usersData from "../users/UsersData";
 
 export default {
   name: "Tables",

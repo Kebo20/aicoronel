@@ -288,14 +288,13 @@ import axios from "../../Config/axios";
 import "@fortawesome/fontawesome-free/js/all.js";
 import swal from "sweetalert";
 
-import CTableWrapper from "./Table.vue";
 
 import { ModelListSelect } from "vue-search-select";
 import "vue-search-select/dist/VueSearchSelect.css";
 
 export default {
   name: "addSale",
-  components: { CTableWrapper },
+  components: {  },
   data() {
     return {
       arrayProducts: [],
@@ -500,7 +499,7 @@ export default {
         .then(function (response) {
           if (response) {
             swal("Correcto", response.data.message, "success");
-            this.clear();
+            me.clear();
           } else {
             swal("Error ", response.message, "error");
           }
@@ -512,6 +511,7 @@ export default {
       me.modal = 0;
     },
     clear() {
+      
       let me = this;
       me.client = { id_client: "", name: "" };
       me.product = { id_product: "", name: "" };
