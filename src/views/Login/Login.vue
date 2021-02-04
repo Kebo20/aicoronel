@@ -80,8 +80,8 @@ export default {
   components: {},
   data() {
     return {
-      name: "henry",
-      password: "12345",
+      name: "",
+      password: "",
       user: "",
       modal: 0,
       tipoAccion: 1,
@@ -110,6 +110,12 @@ export default {
 
     login() {
       let me = this;
+
+      if(me.name==''||me.password==''){
+          swal("Mensaje ", 'Ingrese usuario y contraseña', "warning");
+          return false;
+
+      }
       axios
         .post("/auth/login", {
           name: me.name,
@@ -135,7 +141,7 @@ export default {
           }
         })
         .catch(function (error) {
-          swal("Error ", error.message, "error");
+          swal("Error ", error.response.data.message, "error");
         });
     },
 
