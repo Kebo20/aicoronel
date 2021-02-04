@@ -119,6 +119,8 @@
                     <th>Producto</th>
                     <th>Precio</th>
                     <th>Cantidad</th>
+                    <th>Dscto.</th>
+
                     <th>Subtotal</th>
                   </tr>
                 </thead>
@@ -128,6 +130,8 @@
 
                     <td align="right" v-text="d.price"></td>
                     <td align="right" v-text="d.quantity"></td>
+                    <td align="right" v-text="d.discount"></td>
+
                     <td
                       align="right"
                       v-text="d.subtotal"
@@ -140,15 +144,15 @@
                   style="background-color: #3192a5"
                 >
                   <tr>
-                    <td colspan="3">Subtotal</td>
+                    <td colspan="4">Subtotal</td>
                     <td v-text="'S/.' + sale.subtotal"></td>
                   </tr>
                   <tr>
-                    <td colspan="3">Igv</td>
+                    <td colspan="4">Igv</td>
                     <td v-text="'S/.' + sale.igv" class=""></td>
                   </tr>
                   <tr>
-                    <td colspan="3">Total</td>
+                    <td colspan="4">Total</td>
                     <td v-text="'S/.' + sale.total" class=""></td>
                   </tr>
                 </tbody>
