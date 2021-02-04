@@ -21,7 +21,7 @@
                       class="select-search form-control form-control-sm"
                     >
                       <option  value="1">Bagua</option>
-                      <option value="2">Bagua Chica</option>
+                      <option value="2">Bagua Grande</option>
                     </select>
                   </div>
                   <div class="" v-if="rol == '2'">

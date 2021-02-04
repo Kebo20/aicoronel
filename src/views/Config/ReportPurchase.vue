@@ -42,7 +42,7 @@
                       class="select-search form-control form-control-sm"
                     >
                       <option value="1">Bagua</option>
-                      <option value="2">Bagua Chica</option>
+                      <option value="2">Bagua Grande</option>
                     </select>
                   </div>
                   <div class="form-group col-sm-12 col-md-6 col-lg-3  ">
@@ -121,7 +121,7 @@
                       class="select-search form-control form-control-sm"
                     >
                       <option value="1">Bagua</option>
-                      <option value="2">Bagua Chica</option>
+                      <option value="2">Bagua Grande</option>
                     </select>
                   </div>
                   <div class="form-group col-sm-12 col-md-6 col-lg-3  ">
@@ -200,7 +200,7 @@
                       class="select-search form-control form-control-sm"
                     >
                       <option value="1">Bagua</option>
-                      <option value="2">Bagua Chica</option>
+                      <option value="2">Bagua Grande</option>
                     </select>
                   </div>
 
