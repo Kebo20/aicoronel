@@ -30,7 +30,18 @@
               <div class="form-group col-sm-12 col-md-6 col-lg-4">
                 <label class="form-control-label" for="email-input"
                   >Cliente</label
+                > <a
+                
+                    @click="
+                    modal = 1;
+                    accion = 1;
+                    id = 0;
+                    clean();
+                  "
+                  class="btn btn-xs"
                 >
+                  <span class="fa fa-plus-circle"></span> 
+                </a>
                 <div class="">
                   <model-list-select
                     :list="arrayClients"
@@ -43,6 +54,7 @@
                   </model-list-select>
                 </div>
               </div>
+             
               <div class="form-group col-sm-12 col-md-6 col-lg-4">
                 <label class="form-control-label" for="email-input"
                   >Tipo de documento</label
@@ -97,7 +109,7 @@
                     class="select-search form-control form-control-sm"
                   >
                     <option selected="true" value="1">Bagua</option>
-                    <option value="2">Bagua Chica</option>
+                    <option value="2">Bagua Grande</option>
                   </select>
                 </div>
                 <div class="" v-if="rol == '2'">
@@ -255,7 +267,7 @@
               <button
                 type="button"
                 class="btn btn-secondary"
-                @click="modal = 0"
+                @click="clear()"
               >
                 Cerrar
               </button>
@@ -280,6 +292,149 @@
         </CCol>
       </CRow>
     </CCard>
+       <!--Inicio del modal agregar/actualizar-->
+    <div
+      class="modal fade"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      style="display: none"
+      aria-hidden="true"
+      :class="{ mostrar: modal }"
+    >
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Registrar Cliente</h4>
+            <button
+              type="button"
+              class="close"
+              @click="modal = 0"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="email-input"
+                >Tipo de documento</label
+              >
+              <div class="col-md-9">
+                <!-- <select
+                  v-model="client.type_doc"
+                  class="select-search form-control"
+                >
+                  <option selected value="DNI">DNI</option>
+                  <option value="RUC">RUC</option>
+                </select> -->
+                 <model-list-select
+                  :list="arrayTypeDoc"
+                  v-model="clientNew.type_doc"
+                  option-value="name"
+                  option-text="name"
+                  placeholder="Seleccione"
+                >
+                </model-list-select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input"
+                >Número de documento</label
+              >
+              <div class="col-md-9">
+                <input
+                  type="text"
+                  v-model="clientNew.number_doc"
+                  class="form-control"
+                  placeholder="Número de RUC/DNI "
+                />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input"
+                >Nombre</label
+              >
+              <div class="col-md-9">
+                <input
+                  type="text"
+                  v-model="clientNew.name"
+                  class="form-control"
+                  placeholder="Nombre de proveedor"
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="email-input"
+                >Dirección</label
+              >
+              <div class="col-md-9">
+                <input
+                  type="email"
+                  v-model="clientNew.address"
+                  class="form-control"
+                  placeholder="Ingrese dirección"
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="email-input"
+                >Celular/Teléfono</label
+              >
+              <div class="col-md-9">
+                <input
+                  type="text"
+                  v-model="clientNew.phone"
+                  class="form-control"
+                  placeholder="Ingrese teléfono"
+                />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="email-input"
+                >Correo</label
+              >
+              <div class="col-md-9">
+                <input
+                  type="email"
+                  v-model="clientNew.email"
+                  class="form-control"
+                  placeholder="Ingrese correo"
+                />
+              </div>
+            </div>
+
+     
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="modal = 0">
+              Cerrar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              v-if="accion == 1"
+              @click="saveClient()"
+            >
+              Guardar
+            </button>
+            <!-- <button
+              type="button"
+              class="btn btn-primary"
+              v-if="accion == 2"
+              @click="save()"
+            >
+              Actualizar
+            </button> -->
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!--Fin del modal-->
   </div>
 </template>
 
@@ -288,18 +443,27 @@ import axios from "../../Config/axios";
 import "@fortawesome/fontawesome-free/js/all.js";
 import swal from "sweetalert";
 
-
 import { ModelListSelect } from "vue-search-select";
 import "vue-search-select/dist/VueSearchSelect.css";
 
 export default {
   name: "addSale",
-  components: {  },
+  components: {},
   data() {
     return {
-      arrayProducts: [],
+      arrayTypeDoc:[{name:'DNI'},{name:'RUC'}],
 
+      arrayProducts: [],
+  
       client: { id_client: "", name: "" },
+        clientNew: {
+        name: "",
+        type_doc: "DNI",
+        number_doc: "",
+        email: "",
+        phone: "",
+        address: "",
+      },
       product: { id_product: "", name: "" },
 
       arrayClients: [],
@@ -511,7 +675,6 @@ export default {
       me.modal = 0;
     },
     clear() {
-      
       let me = this;
       me.client = { id_client: "", name: "" };
       me.product = { id_product: "", name: "" };
@@ -532,6 +695,56 @@ export default {
 
     validator(val) {
       return val ? val.length > 0 : false;
+    },
+
+
+      validateClient() {
+      let me = this;
+      let count = 0;
+
+      if (me.clientNew.type_doc == "") {
+        swal("Datos incompletos", "Ingrese un tipo de documento", "warning");
+        count = 1;
+      }
+      if (me.clientNew.number_doc == "") {
+        swal("Datos incompletos", "Ingrese un número de documento", "warning");
+        count = 1;
+      }
+      if (me.clientNew.name == "") {
+        swal("Datos incompletos", "Ingrese un nombre", "warning");
+        count = 1;
+      }
+
+      return count;
+    },
+
+    saveClient() {
+      let me = this;
+      if (this.validateClient() > 0) {
+        return false;
+      }
+
+      if (me.accion == 1) {
+        axios
+          .post("/auth/clients", {
+            name: me.clientNew.name,
+            type_doc: me.clientNew.type_doc,
+            number_doc: me.clientNew.number_doc,
+            address: me.clientNew.address,
+            phone: me.clientNew.phone,
+            email: me.clientNew.email,
+          })
+          .then(function (response) {
+            me.clients();
+            swal("Correcto", response.data.message, "success");
+            me.modal = 0;
+          })
+          .catch(function (error) {
+            console.log(error.response);
+          swal("Error ", error.response.data.message, "error");
+          });
+        
+      } 
     },
   },
 };

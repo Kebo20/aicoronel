@@ -12,7 +12,7 @@
                 >
               </CCol>
 
-              <CCol v-if="rol =='1'" lg="2" sm="6">
+              <CCol  lg="2" sm="6">
                 <CButton
                   color="primary"
                   @click="
@@ -40,8 +40,7 @@
               :column-filter="true"
               caption="Lista de clientes"
               :fields="
-                rol == '1'
-                  ? [
+                 [
                       {
                         key: 'name',
                         label: 'Nombre',
@@ -94,44 +93,7 @@
                         filter: true,
                       },
                     ]
-                  : [
-                      {
-                        key: 'name',
-                        label: 'Nombre',
-                        _style: { width: '1%' },
-                        sorter: false,
-                        filter: true,
-                      },
-                      {
-                        key: 'number_doc',
-                        label: 'N° de documento',
-                        _style: { width: '1%' },
-                        sorter: false,
-                        filter: true,
-                      },
-                      {
-                        key: 'email',
-                        label: 'Correo',
-                        _style: { width: '1%' },
-                        sorter: false,
-                        filter: true,
-                      },
-                      {
-                        key: 'address',
-                        label: 'Dirección',
-                        _style: { width: '1%' },
-                        sorter: false,
-                        filter: true,
-                      },
-                      {
-                        key: 'phone',
-                        label: 'Teléfono',
-                        _style: { width: '1%' },
-                        value: 'hola',
-                        sorter: false,
-                        filter: true,
-                      }
-                    ]
+                  
               "
               pagination
             >

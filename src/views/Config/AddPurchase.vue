@@ -245,7 +245,7 @@
               <button
                 type="button"
                 class="btn btn-secondary"
-                @click="modal = 0"
+                @click="clear()"
               >
                 Cerrar
               </button>
