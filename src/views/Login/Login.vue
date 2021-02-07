@@ -133,7 +133,8 @@ export default {
             
 
             swal("Bienvenido", me.$store.state.user, "success");
-            me.$router.push("/");
+            // me.$router.push("/");
+            window.location='/'
             axios.defaults.headers.common["Authorization"] =
               "Bearer " + response.data.access_token;
           } else {

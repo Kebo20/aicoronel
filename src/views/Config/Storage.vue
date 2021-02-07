@@ -46,7 +46,7 @@
 
           <CCardBody>
             <CDataTable
-              :items-per-page="5"
+              :items-per-page="10"
               :dark="false"
               :items="arrayProducts"
               :hover="true"
@@ -71,7 +71,7 @@
                 },
                 {
                   key: 'quantity',
-                  label: 'Stock actual',
+                  label: 'Stock Disponible',
                   _style: { width: '20%' },
                   sorter: false,
                   filter: true,

@@ -8,7 +8,7 @@ export default [
         _name: 'CSidebarNavItem',
         name: 'Inicio',
         to: '/dashboard',
-        icon: 'cil-speedometer',
+        //icon: 'cil-speedometer',
        // badge: {
          // color: 'primary',
           //text: 'NEW'
@@ -20,28 +20,29 @@ export default [
       },
       {
         _name: 'CSidebarNavItem',
-        name: 'Proveedores',
+        name: '* Proveedores',
         to: '/provider',
-        icon: 'cil-user'
+      
+        //icon: 'cil-user'
       },
       store.state.rol===1?
       {
         _name: 'CSidebarNavItem',
-        name: 'Usuarios',
+        name: '* Usuarios',
         to: '/user',
-        icon: 'cil-user'
+        //icon: 'cil-user'
       }:'',
       {
         _name: 'CSidebarNavItem',
-        name: 'Clientes',
+        name: '* Clientes',
         to: '/client',
-        icon: 'cil-people'
+        //icon: 'cil-people'
       },
       {
         _name: 'CSidebarNavDropdown',
-        name: 'Productos',
+        name: '* Productos',
         route: '/base',
-        icon: 'cil-puzzle',
+        //icon: 'cil-puzzle',
         items: [
 
           {
@@ -50,7 +51,7 @@ export default [
           },
 
           {
-            name: 'Productos',
+            name: 'Gestionar Productos',
             to: '/product'
           }
         ]
@@ -58,22 +59,23 @@ export default [
      
       {
         _name: 'CSidebarNavTitle',
-        _children: ['Components']
+        _children: ['Gestión']
       },
+      store.state.rol===1?
       {
         _name: 'CSidebarNavDropdown',
-        name: 'Compras',
+        name: '* Compras',
         route: '/base',
-        icon: 'cil-chart',
+        //icon: 'cil-chart',
         items: [
 
           {
-            name: 'Registrar compra',
+            name: 'Registrar Compra',
             to: '/purchase/add'
           },
 
           {
-            name: 'Ver compras',
+            name: 'Ver Compras',
             to: '/purchase/list'
           },
           {
@@ -81,21 +83,16 @@ export default [
             to: '/purchase/reports'
           }
         ]
-      },
-      {
-        _name: 'CSidebarNavItem',
-        name: 'Almacén',
-        to: '/storage',
-        icon: 'cil-storage'
-      },
+      }:'',
+    
       {
         _name: 'CSidebarNavDropdown',
-        name: 'Ventas',
+        name: '* Ventas',
         route: '/sale',
-        icon: 'cil-dollar',
+        //icon: 'cil-dollar',
         items: [
           {
-            name: 'Registrar venta',
+            name: 'Registrar Venta',
             to: '/sale/add'
           },
           {
@@ -104,9 +101,15 @@ export default [
           },
           {
             name: 'Reportes',
-            to: '/sale/reports'
+            to: '/sale/Reports'
           }
         ]
+      },
+      {
+        _name: 'CSidebarNavItem',
+        name: '* Almacén',
+        to: '/storage',
+        //icon: 'cil-storage'
       },
     ]
   }

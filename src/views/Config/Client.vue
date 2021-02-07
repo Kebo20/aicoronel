@@ -49,6 +49,13 @@
                         sorter: false,
                         filter: true,
                       },
+                         {
+                        key: 'type_doc',
+                        label: 'Tipo de documento',
+                        _style: { width: '1%' },
+                        sorter: false,
+                        filter: true,
+                      },
                       {
                         key: 'number_doc',
                         label: 'N° de documento',
@@ -165,7 +172,7 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Registrar cliente</h4>
+            <h4 class="modal-title">Registrar Cliente</h4>
             <button
               type="button"
               class="close"
@@ -178,17 +185,24 @@
           <div class="modal-body">
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="email-input"
-                >Tipo de documneto</label
+                >Tipo de documento</label
               >
               <div class="col-md-9">
-                <select
+                <!-- <select
                   v-model="client.type_doc"
                   class="select-search form-control"
                 >
-                  <option value="0">Seleccionar</option>
-                  <option value="dni">DNI</option>
-                  <option value="ruc">RUC</option>
-                </select>
+                  <option selected value="DNI">DNI</option>
+                  <option value="RUC">RUC</option>
+                </select> -->
+                 <model-list-select
+                  :list="arrayTypeDoc"
+                  v-model="client.type_doc"
+                  option-value="name"
+                  option-text="name"
+                  placeholder="Seleccione"
+                >
+                </model-list-select>
               </div>
             </div>
             <div class="form-group row">
@@ -200,7 +214,7 @@
                   type="text"
                   v-model="client.number_doc"
                   class="form-control"
-                  placeholder="Número de ruc/dni "
+                  placeholder="Número de RUC/DNI "
                 />
               </div>
             </div>
@@ -295,18 +309,21 @@
 import axios from "../../Config/axios";
 import "@fortawesome/fontawesome-free/js/all.js";
 import swal from "sweetalert";
+import { ModelListSelect } from "vue-search-select";
 
 import CTableWrapper from "./Table.vue";
+import "vue-search-select/dist/VueSearchSelect.css";
 
 export default {
-  name: "Tables",
-  components: { CTableWrapper },
+  name: "Client",
+  components: { CTableWrapper,ModelListSelect },
   data() {
     return {
       arrayClients: [],
+      arrayTypeDoc:[{name:'DNI'},{name:'RUC'}],
       client: {
         name: "",
-        type_doc: "",
+        type_doc: "DNI",
         number_doc: "",
         email: "",
         phone: "",

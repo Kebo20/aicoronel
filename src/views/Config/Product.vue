@@ -162,7 +162,7 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Registrar producto</h4>
+            <h4 class="modal-title">Registrar Producto</h4>
             <button
               type="button"
               class="close"
@@ -205,7 +205,7 @@
                   v-model="category"
                   option-value="id_category"
                   option-text="name"
-                  placeholder="seleccione"
+                  placeholder="Seleccione"
                 >
                 </model-list-select>
               </div>
@@ -291,7 +291,7 @@ import { ModelListSelect } from "vue-search-select";
 import "vue-search-select/dist/VueSearchSelect.css";
 
 export default {
-  name: "Tables",
+  name: "Product",
   components: {  },
   data() {
     return {
@@ -303,7 +303,7 @@ export default {
         units: "",
         id_category: "",
       },
-      category: { id_category: "", name: "" },
+      category: {  },
       arrayCategories: [],
       modalRegistrar: false,
       modal: 0,
@@ -322,6 +322,9 @@ rol:this.$store.state.rol
     this.products();
     this.categories();
   },
+  computed(){
+    
+  },
   methods: {
     clean() {
       let me = this;
@@ -331,6 +334,7 @@ rol:this.$store.state.rol
         price: "",
         units: "",
         id_category: "",
+        category:{}
       };
     },
 

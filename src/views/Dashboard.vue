@@ -117,7 +117,7 @@
       </CCardFooter>
     </CCard> -->
 
-    <CCard>
+    <!-- <CCard>
       <CCardBody>
         <CRow>
           <CCol> <line-chart :data="getPurchases"></line-chart> </CCol>
@@ -125,16 +125,26 @@
 
         </CRow>
       </CCardBody>
+    </CCard> -->
+    <CCard>
+      <CCardBody>
+        <CRow>
+          <CCol>
+            <area-chart   ytitle='S/.' title='Ventas' :data="getSales"></area-chart>
+
+          </CCol>
+          
+        </CRow>
+      </CCardBody>
     </CCard>
     <CCard>
       <CCardBody>
         <CRow>
           <CCol>
-            <column-chart :data="getPurchases"></column-chart>
+            <area-chart  ytitle='S/.' title='Compras' :data="getPurchases"></area-chart>
+
           </CCol>
-            <CCol>
-            <column-chart :data="getSales"></column-chart>
-          </CCol>
+          
         </CRow>
       </CCardBody>
     </CCard>
@@ -549,7 +559,7 @@ export default {
       axios
         .post("/auth/purchases/totalForMonth", { id_storage: me.id_storage })
         .then(function (response) {
-          me.total_purchases_month = response.data.data;
+          me.total_purchases_month = response.data;
 
           console.log(me.total_purchases_month);
         })
@@ -595,7 +605,7 @@ export default {
       axios
         .post("/auth/sales/totalForMonth", { id_storage: me.id_storage })
         .then(function (response) {
-          me.total_sales_month = response.data.data;
+          me.total_sales_month = response.data;
           console.log(response.data.data);
         })
         .catch(function (error) {
@@ -618,7 +628,7 @@ export default {
     getPurchases() {
       let me = this;
       me.total_purchases_month.map((valor, index) => {
-        let date = valor.date;
+        let date = valor.month;
         let total = valor.total;
         me.total_purchases_month[index] = [date, total];
       });
@@ -627,7 +637,7 @@ export default {
      getSales() {
       let me = this;
       me.total_sales_month.map((valor, index) => {
-        let date = valor.date;
+        let date = valor.month;
         let total = valor.total;
         me.total_sales_month[index] = [date, total];
       });

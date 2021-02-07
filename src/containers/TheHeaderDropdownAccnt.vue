@@ -8,7 +8,7 @@
     <template #toggler>
       <CHeaderNavLink>
         <div class="c-avatar">
-          <img src="img/avatars/6.jpg" class="c-avatar-img" />
+          <img src="img/user.png" class="c-avatar-img" />
         </div>
       </CHeaderNavLink>
     </template>
@@ -50,7 +50,7 @@
     </CDropdownItem> -->
     <CDropdownItem>
       <CIcon name="cil-lock-locked" />
-      <button class="btn" @click="logout">Logout</button>
+      <button class="btn" @click="logout">Salir</button>
     </CDropdownItem>
   </CDropdown>
 </template>
@@ -87,6 +87,12 @@ export default {
         })
         .catch(function (error) {
           console.log(error);
+          me.$store.commit('user', '')
+            me.$store.commit('rol', '')
+            me.$store.commit('token', '')
+          me.$router.push("/login");
+
+
         });
     },
   },

@@ -185,7 +185,7 @@
                     <th>Precio</th>
                     <th>Cant.</th>
                     <th>Dscto.</th>
-                    <th>Subtotal</th>
+                    <th>Importe</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -240,7 +240,7 @@
                     <td v-text="dato.subtotal"></td>
                   </tr>
                   <tr>
-                    <td colspan="5">Igv</td>
+                    <td colspan="5">Igv (18%)</td>
                     <td v-text="dato.igv" class=""></td>
                   </tr>
                   <tr>

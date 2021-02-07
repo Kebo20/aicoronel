@@ -125,6 +125,15 @@ const router = new Router({
           path: 'purchase',
           name:'Compras',
           redirect: '/purchase/list',
+          beforeEnter:(to, from, next) => {
+            let rol=store.state.rol
+            if(rol==1){
+             next()
+           }else{
+              next("/404")
+            }
+           
+           },
           component: {
             render(c) { return c('router-view') }
           },

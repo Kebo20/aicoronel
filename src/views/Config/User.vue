@@ -102,7 +102,7 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Registrar usuario</h4>
+            <h4 class="modal-title">Registrar Usuario</h4>
             <button
               type="button"
               class="close"
@@ -136,7 +136,7 @@
                   v-model="rol"
                   option-value="id_role"
                   option-text="name"
-                  placeholder="seleccione"
+                  placeholder="Seleccione"
                 >
                 </model-list-select>
               </div>
@@ -163,7 +163,20 @@
                   type="text"
                   v-model="password"
                   class="form-control"
-                  placeholder="Ingrese una contraseña"
+                  placeholder="Ingrese una nueva contraseña"
+                />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="email-input"
+                >Repita contraseña</label
+              >
+              <div class="col-md-9">
+                <input
+                  type="text"
+                  v-model="password_repeat"
+                  class="form-control"
+                  placeholder="Ingrese otra vez la contraseña"
                 />
               </div>
             </div>
@@ -200,17 +213,18 @@
 </template>
 
 <script>
+var strongRegex = new RegExp("^(?=.*[a-zA-Z])(?=.*[0-9])(?=.{8,})");
+
 import axios from "../../Config/axios";
 import "@fortawesome/fontawesome-free/js/all.js";
 import swal from "sweetalert";
-
 
 import { ModelListSelect } from "vue-search-select";
 import "vue-search-select/dist/VueSearchSelect.css";
 
 export default {
   name: "user",
-  components: {  },
+  components: {},
   data() {
     return {
       arrayUsers: [],
@@ -227,7 +241,8 @@ export default {
       modal: 0,
       accion: 1,
       id: "",
-      password:''
+      password: "",
+      password_repeat: "",
     };
   },
 
@@ -237,7 +252,6 @@ export default {
   mounted() {
     this.users();
     this.roles();
-      
   },
   methods: {
     clean() {
@@ -245,10 +259,10 @@ export default {
       me.user = {
         name: "",
         email: "",
-        password: "",
 
         id_role: "",
       };
+      (me.password = ""), (me.password_repeat = "");
     },
 
     edit(id) {
@@ -338,21 +352,41 @@ export default {
       if (me.user.name == "") {
         swal("Datos incompletos", "Ingrese un nombre", "warning");
         count = 1;
+        return count;
       }
       if (me.user.email == "") {
         swal("Datos incompletos", "Ingrese un correo", "warning");
         count = 1;
+        return count;
       }
-      if (me.user.password == "") {
-        swal("Datos incompletos", "Ingrese una contraseña segura", "warning");
+
+      if (me.password == "") {
+        swal("Datos incompletos", "Ingrese una contraseña ", "warning");
         count = 1;
+        return count;
       }
+
+      if (!strongRegex.test(me.password)) {
+        swal(
+          "Datos incorrectos",
+          "La contraseña debe tener mínimo 8 digitos, una letra y un número",
+          "warning"
+        );
+        count = 1;
+        return count;
+      }
+
+      if (me.password != me.password_repeat) {
+        swal("Datos incompletos", "Contraseñas no coinciden ", "warning");
+        count = 1;
+        return count;
+      }
+
       if (me.rol.id_role == "") {
         swal("Datos incompletos", "Seleccione una categoría", "warning");
         count = 1;
+        return count;
       }
-
-      return count;
     },
 
     save() {
