@@ -12,7 +12,7 @@
                 >
               </CCol>
 
-              <CCol v-if="rol =='1'" lg="2" sm="6">
+              <CCol v-if="rol == '1'" lg="2" sm="6">
                 <CButton
                   color="primary"
                   @click="
@@ -39,92 +39,97 @@
               :border="true"
               :column-filter="true"
               caption="Lista de productos"
-              :fields="rol=='1'?[
-                {
-                  key: 'name',
-                  label: 'Nombre',
-                  _style: { width: '20%' },
-                  sorter: false,
-                  filter: true,
-                },
-                {
-                  key: 'category_name',
-                  label: 'Categoría',
-                  _style: { width: '20%' },
-                  sorter: false,
-                  filter: true,
-                },
-                {
-                  key: 'brand',
-                  label: 'Marca',
-                  _style: { width: '20%' },
-                  sorter: false,
-                  filter: true,
-                },
-                {
-                  key: 'price',
-                  label: 'Precio',
-                  _style: { width: '20%' },
-                  sorter: false,
-                  filter: true,
-                },
-                {
-                  key: 'units',
-                  label: 'Unidad',
-                  _style: { width: '20%' },
-                  sorter: false,
-                  filter: true,
-                },
+              :fields="
+                rol == '1'
+                  ? [
+                      {
+                        key: 'name',
+                        label: 'Nombre',
+                        _style: { width: '20%' },
+                        sorter: false,
+                        filter: true,
+                      },
+                      {
+                        key: 'category_name',
+                        label: 'Categoría',
+                        _style: { width: '20%' },
+                        sorter: false,
+                        filter: true,
+                      },
+                      {
+                        key: 'brand',
+                        label: 'Marca',
+                        _style: { width: '20%' },
+                        sorter: false,
+                        filter: true,
+                      },
+                      {
+                        key: 'price',
+                        label: 'Precio',
+                        _style: { width: '20%' },
+                        sorter: false,
+                        filter: true,
+                      },
+                      {
+                        key: 'price2',
+                        label: 'Precio por mayor',
+                        _style: { width: '20%' },
+                        sorter: false,
+                        filter: true,
+                      },
+                     
 
-                {
-                  key: 'actions',
-                  label: 'Acciones',
-                  _style: { width: '1%' },
-                  value: 'hola',
-                  sorter: false,
-                  filter: false,
-                },
-              ]:[
-                {
-                  key: 'name',
-                  label: 'Nombre',
-                  _style: { width: '20%' },
-                  sorter: false,
-                  filter: true,
-                },
-                {
-                  key: 'category_name',
-                  label: 'Categoría',
-                  _style: { width: '20%' },
-                  sorter: false,
-                  filter: true,
-                },
-                {
-                  key: 'brand',
-                  label: 'Marca',
-                  _style: { width: '20%' },
-                  sorter: false,
-                  filter: true,
-                },
-                {
-                  key: 'price',
-                  label: 'Precio',
-                  _style: { width: '20%' },
-                  sorter: false,
-                  filter: true,
-                },
-                {
-                  key: 'units',
-                  label: 'Unidad',
-                  _style: { width: '20%' },
-                  sorter: false,
-                  filter: true,
-                }
-              ]"
+                      {
+                        key: 'actions',
+                        label: 'Acciones',
+                        _style: { width: '1%' },
+                        value: 'hola',
+                        sorter: false,
+                        filter: false,
+                      },
+                    ]
+                  : [
+                      {
+                        key: 'name',
+                        label: 'Nombre',
+                        _style: { width: '20%' },
+                        sorter: false,
+                        filter: true,
+                      },
+                      {
+                        key: 'category_name',
+                        label: 'Categoría',
+                        _style: { width: '20%' },
+                        sorter: false,
+                        filter: true,
+                      },
+                      {
+                        key: 'brand',
+                        label: 'Marca',
+                        _style: { width: '20%' },
+                        sorter: false,
+                        filter: true,
+                      },
+                      {
+                        key: 'price',
+                        label: 'Precio',
+                        _style: { width: '20%' },
+                        sorter: false,
+                        filter: true,
+                      },
+                         {
+                        key: 'price2',
+                        label: 'Precio por mayor',
+                        _style: { width: '20%' },
+                        sorter: false,
+                        filter: true,
+                      },
+                    ]
+              "
               pagination
             >
               <template #actions="{ item }">
-                <td   align="center">
+                <td align="center">
                   <button
                     href="#"
                     class="btn btn-sm"
@@ -140,9 +145,7 @@
                     <span class="fa fa-trash"></span>
                   </button>
                 </td>
-               
               </template>
-             
             </CDataTable>
           </CCardBody>
         </CCol>
@@ -223,6 +226,20 @@
                 />
               </div>
             </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="email-input"
+                >Precio por mayor</label
+              >
+              <div class="col-md-9">
+                <input
+                  type="number"
+                  v-model="product.price2"
+                  class="form-control"
+                  placeholder="Ingrese precio al por mayor"
+                />
+              </div>
+            </div>
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="email-input"
                 >Marca</label
@@ -237,7 +254,7 @@
               </div>
             </div>
 
-            <div class="form-group row">
+            <!-- <div class="form-group row">
               <label class="col-md-3 form-control-label" for="email-input"
                 >Unidad</label
               >
@@ -249,7 +266,7 @@
                   placeholder="Ingrese unidad"
                 />
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" @click="modal = 0">
@@ -286,13 +303,12 @@ import axios from "../../Config/axios";
 import "@fortawesome/fontawesome-free/js/all.js";
 import swal from "sweetalert";
 
-
 import { ModelListSelect } from "vue-search-select";
 import "vue-search-select/dist/VueSearchSelect.css";
 
 export default {
   name: "Product",
-  components: {  },
+  components: {},
   data() {
     return {
       arrayProducts: [],
@@ -300,10 +316,11 @@ export default {
         name: "",
         brand: "",
         price: "",
+        price2: "",
         units: "",
         id_category: "",
       },
-      category: {  },
+      category: {},
       arrayCategories: [],
       modalRegistrar: false,
       modal: 0,
@@ -311,7 +328,7 @@ export default {
       id: "",
       search: "",
       arrayErrors: [],
-rol:this.$store.state.rol
+      rol: this.$store.state.rol,
     };
   },
 
@@ -322,9 +339,7 @@ rol:this.$store.state.rol
     this.products();
     this.categories();
   },
-  computed(){
-    
-  },
+  computed() {},
   methods: {
     clean() {
       let me = this;
@@ -334,7 +349,7 @@ rol:this.$store.state.rol
         price: "",
         units: "",
         id_category: "",
-        category:{}
+        category: {},
       };
     },
 
@@ -360,7 +375,7 @@ rol:this.$store.state.rol
           axios
             .delete("/auth/products/" + me.id)
             .then(function (response) {
-              console.log(response)
+              console.log(response);
               if (response) {
                 swal("Correcto", response.data.message, "success");
                 me.products();
@@ -369,8 +384,8 @@ rol:this.$store.state.rol
               }
             })
             .catch(function (error) {
-              console.log(error.response)
-              swal("Error",error.response.data.message, "error");
+              console.log(error.response);
+              swal("Error", error.response.data.message, "error");
             });
         }
       });
@@ -452,6 +467,8 @@ rol:this.$store.state.rol
             name: me.product.name,
             brand: me.product.brand,
             price: me.product.price,
+            price2: me.product.price2,
+
             id_category: me.category.id_category,
             units: me.product.units,
           })
@@ -474,6 +491,8 @@ rol:this.$store.state.rol
             name: me.product.name,
             brand: me.product.brand,
             price: me.product.price,
+            price2: me.product.price2,
+
             id_category: me.category.id_category,
             units: me.product.units,
           })

@@ -69,6 +69,7 @@
                     v-model="purchase.number_doc"
                     class="form-control form-control-sm"
                     placeholder="Número de documento "
+                    
                   />
                 </div>
               </div>
@@ -131,7 +132,7 @@
                     :list="arrayProducts"
                     v-model="product"
                     option-value="id_product"
-                    option-text="name"
+                    option-text="name_brand"
                     placeholder="Seleccione"
                     class="form-control form-control-sm"
                   >
@@ -335,6 +336,7 @@ rol:this.$store.state.rol    };
   mounted() {
     this.products();
     this.providers();
+   // this.correlativo()
 
   },
   methods: {
@@ -368,7 +370,7 @@ rol:this.$store.state.rol    };
 
       me.arrayDetail.push({
         id_product: me.product.id_product,
-        name: me.product.name,
+        name: me.product.name_brand,
         quantity: me.detail.quantity,
         price: me.detail.price,
       });
@@ -430,10 +432,17 @@ rol:this.$store.state.rol    };
         });
     },
 
+   
+
     validate() {
       let me = this;
       let count = 0;
 
+
+      if (me.purchase.date == "") {
+        swal("Datos incompletos", "Ingrese una fecha", "warning");
+        count = 1;
+      }
       if (me.purchase.number_doc == "") {
         swal("Datos incompletos", "Ingrese un número de documento", "warning");
         count = 1;

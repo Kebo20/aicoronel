@@ -242,6 +242,7 @@
                   v-model="provider.phone"
                   class="form-control"
                   placeholder="Ingrese teléfono"
+                  max="12"
                 />
               </div>
             </div>

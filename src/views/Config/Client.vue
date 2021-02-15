@@ -217,6 +217,8 @@
                   v-model="client.phone"
                   class="form-control"
                   placeholder="Ingrese teléfono"
+                  max="12"
+
                 />
               </div>
             </div>

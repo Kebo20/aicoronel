@@ -32,13 +32,7 @@
                   sorter: false,
                   filter: true,
                 },
-                {
-                  key: 'type_doc',
-                  label: 'Tipo',
-                  _style: { width: '10%', text: 'center' },
-                  sorter: false,
-                  filter: true,
-                },
+                
                 {
                   key: 'number_doc',
                   label: 'Número ',
