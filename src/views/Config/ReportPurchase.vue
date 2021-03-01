@@ -174,7 +174,7 @@
                         class="form-control form-control-sm"
                       >
                         <option value="1">Enero</option>
-                        <option value="2">Febreo</option>
+                        <option value="2">Febrero</option>
                         <option value="3">Marzo</option>
                         <option value="4">Abril</option>
                         <option value="5">Mayo</option>
