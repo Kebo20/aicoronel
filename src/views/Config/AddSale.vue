@@ -95,7 +95,6 @@
                     class="form-control form-control-sm"
                     placeholder="Observación a la compra"
                     maxlength="250"
-
                   />
                 </div>
               </div>
@@ -153,8 +152,8 @@
               </div>
               <div class="form-group col-sm-12 col-md-6 col-lg-2">
                 <label class="form-control-label" for="email-input"
-                  >Precios </label
-                >
+                  >Precios
+                </label>
                 <div class="">
                   <select
                     v-model="price"
@@ -351,7 +350,6 @@
                   class="form-control"
                   placeholder="Número de RUC/DNI "
                   maxlength="15"
-
                 />
               </div>
             </div>
@@ -367,7 +365,6 @@
                   class="form-control"
                   placeholder="Nombre de proveedor"
                   maxlength="250"
-
                 />
               </div>
             </div>
@@ -382,7 +379,6 @@
                   class="form-control"
                   placeholder="Ingrese dirección"
                   maxlength="250"
-
                 />
               </div>
             </div>
@@ -397,7 +393,6 @@
                   class="form-control"
                   placeholder="Ingrese teléfono"
                   maxlength="12"
-
                 />
               </div>
             </div>
@@ -413,7 +408,6 @@
                   class="form-control"
                   placeholder="Ingrese correo"
                   maxlength="250"
-
                 />
               </div>
             </div>
@@ -689,6 +683,8 @@ export default {
         .then(function (response) {
           if (response) {
             swal("Correcto", response.data.message, "success");
+            me.correlativo();
+
             me.clear();
           } else {
             swal("Error ", response.message, "error");
@@ -707,7 +703,6 @@ export default {
       me.sale = {
         date: "",
         type_doc: "FACTURA",
-        number_doc: "",
         observation: "",
         id_storage: "1",
       };
