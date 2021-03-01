@@ -186,6 +186,8 @@
                   v-model="product.name"
                   class="form-control"
                   placeholder="Nombre de producto"
+                  maxlength="250"
+
                 />
               </div>
             </div>
@@ -223,6 +225,8 @@
                   v-model="product.price"
                   class="form-control"
                   placeholder="Ingrese precio"
+                  maxlength="10"
+
                 />
               </div>
             </div>
@@ -237,6 +241,8 @@
                   v-model="product.price2"
                   class="form-control"
                   placeholder="Ingrese precio al por mayor"
+                  maxlength="10"
+
                 />
               </div>
             </div>
@@ -250,6 +256,8 @@
                   v-model="product.brand"
                   class="form-control"
                   placeholder="Ingrese nombre de marca"
+                  maxlength="100"
+
                 />
               </div>
             </div>

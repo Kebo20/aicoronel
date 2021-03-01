@@ -12,7 +12,7 @@
                 >
               </CCol>
 
-              <CCol  lg="2" sm="6">
+              <CCol lg="2" sm="6">
                 <CButton
                   color="primary"
                   @click="
@@ -39,62 +39,59 @@
               :border="true"
               :column-filter="true"
               caption="Lista de clientes"
-              :fields="
-                 [
-                      {
-                        key: 'name',
-                        label: 'Nombre',
-                        _style: { width: '1%' },
-                        sorter: false,
-                        filter: true,
-                      },
-                         {
-                        key: 'type_doc',
-                        label: 'Tipo de documento',
-                        _style: { width: '1%' },
-                        sorter: false,
-                        filter: true,
-                      },
-                      {
-                        key: 'number_doc',
-                        label: 'N° de documento',
-                        _style: { width: '1%' },
-                        sorter: false,
-                        filter: true,
-                      },
-                      {
-                        key: 'email',
-                        label: 'Correo',
-                        _style: { width: '1%' },
-                        sorter: false,
-                        filter: true,
-                      },
-                      {
-                        key: 'address',
-                        label: 'Dirección',
-                        _style: { width: '1%' },
-                        sorter: false,
-                        filter: true,
-                      },
-                      {
-                        key: 'phone',
-                        label: 'Teléfono',
-                        _style: { width: '1%' },
-                        value: 'hola',
-                        sorter: false,
-                        filter: true,
-                      },
-                      {
-                        key: 'actions',
-                        label: 'Acciones',
-                        _style: { width: '1%' },
-                        value: 'hola',
-                        sorter: false,
-                        filter: true,
-                      },
-                    ]
-                  
-              "
+              :fields="[
+                {
+                  key: 'name',
+                  label: 'Nombre',
+                  _style: { width: '1%' },
+                  sorter: false,
+                  filter: true,
+                },
+                {
+                  key: 'type_doc',
+                  label: 'Tipo de documento',
+                  _style: { width: '1%' },
+                  sorter: false,
+                  filter: true,
+                },
+                {
+                  key: 'number_doc',
+                  label: 'N° de documento',
+                  _style: { width: '1%' },
+                  sorter: false,
+                  filter: true,
+                },
+                {
+                  key: 'email',
+                  label: 'Correo',
+                  _style: { width: '1%' },
+                  sorter: false,
+                  filter: true,
+                },
+                {
+                  key: 'address',
+                  label: 'Dirección',
+                  _style: { width: '1%' },
+                  sorter: false,
+                  filter: true,
+                },
+                {
+                  key: 'phone',
+                  label: 'Teléfono',
+                  _style: { width: '1%' },
+                  value: 'hola',
+                  sorter: false,
+                  filter: true,
+                },
+                {
+                  key: 'actions',
+                  label: 'Acciones',
+                  _style: { width: '1%' },
+                  value: 'hola',
+                  sorter: false,
+                  filter: true,
+                },
+              ]"
               pagination
             >
               <template #actions="{ item }">
@@ -134,7 +131,8 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Registrar Cliente</h4>
+            <h4 class="modal-title" v-if="accion == 1">Registrar Cliente</h4>
+            <h4 class="modal-title" v-else>Actualizar Cliente</h4>
             <button
               type="button"
               class="close"
@@ -157,7 +155,7 @@
                   <option selected value="DNI">DNI</option>
                   <option value="RUC">RUC</option>
                 </select> -->
-                 <model-list-select
+                <model-list-select
                   :list="arrayTypeDoc"
                   v-model="client.type_doc"
                   option-value="name"
@@ -177,6 +175,7 @@
                   v-model="client.number_doc"
                   class="form-control"
                   placeholder="Número de RUC/DNI "
+                  maxlength="15"
                 />
               </div>
             </div>
@@ -190,7 +189,8 @@
                   type="text"
                   v-model="client.name"
                   class="form-control"
-                  placeholder="Nombre de proveedor"
+                  placeholder="Nombre de cliente"
+                  maxlength="250"
                 />
               </div>
             </div>
@@ -204,6 +204,7 @@
                   v-model="client.address"
                   class="form-control"
                   placeholder="Ingrese dirección"
+                  maxlength="250"
                 />
               </div>
             </div>
@@ -217,8 +218,7 @@
                   v-model="client.phone"
                   class="form-control"
                   placeholder="Ingrese teléfono"
-                  max="12"
-
+                  maxlength="12"
                 />
               </div>
             </div>
@@ -233,11 +233,10 @@
                   v-model="client.email"
                   class="form-control"
                   placeholder="Ingrese correo"
+                  maxlength="250"
                 />
               </div>
             </div>
-
-     
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" @click="modal = 0">
@@ -273,18 +272,19 @@
 import axios from "../../Config/axios";
 import "@fortawesome/fontawesome-free/js/all.js";
 import swal from "sweetalert";
-import { ModelListSelect } from "vue-search-select";
 
 import CTableWrapper from "./Table.vue";
+import { ModelListSelect } from "vue-search-select";
+
 import "vue-search-select/dist/VueSearchSelect.css";
 
 export default {
   name: "Client",
-  components: { CTableWrapper,ModelListSelect },
+  components: { CTableWrapper, ModelListSelect },
   data() {
     return {
       arrayClients: [],
-      arrayTypeDoc:[{name:'DNI'},{name:'RUC'}],
+      arrayTypeDoc: [{ name: "DNI" }, { name: "RUC" }],
       client: {
         name: "",
         type_doc: "DNI",
@@ -299,7 +299,7 @@ export default {
       id: "",
       search: "",
       arrayErrors: [],
-      rol:this.$store.state.rol
+      rol: this.$store.state.rol,
     };
   },
   mounted() {
@@ -424,7 +424,7 @@ export default {
           })
           .catch(function (error) {
             console.log(error.response);
-          swal("Error ", error.response.data.message, "error");
+            swal("Error ", error.response.data.message, "error");
           });
         me.modal = 0;
       } else {
@@ -442,8 +442,8 @@ export default {
             swal("Correcto", response.data.message, "success");
           })
           .catch(function (error) {
-             console.log(error.response);
-          swal("Error ", error.response.data.message, "error");
+            console.log(error.response);
+            swal("Error ", error.response.data.message, "error");
           });
 
         me.modal = 0;

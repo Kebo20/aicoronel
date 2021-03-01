@@ -126,6 +126,8 @@
                   v-model="category.name"
                   class="form-control"
                   placeholder="Nombre de categoría"
+                  maxlength="250"
+
                 />
               </div>
             </div>

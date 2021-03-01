@@ -166,7 +166,9 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Registrar Proveedor</h4>
+            <h4 class="modal-title" v-if="accion==1" >Registrar Proveedor</h4>
+            <h4 class="modal-title" v-else >Actualizar Proveedor</h4>
+
             <button
               type="button"
               class="close"
@@ -182,13 +184,21 @@
                 >Tipo de documneto</label
               >
               <div class="col-md-9">
-                <select
+                <!-- <select
                   v-model="provider.type_doc"
                   class="select-search form-control"
                 >
                   <option value="0">Seleccionar</option>
                   <option value="dni">DNI</option>
-                  <option value="ruc">RUC</option>
+                  <option value="ruc">RUC</option> -->
+                    <model-list-select
+                  :list="arrayTypeDoc"
+                  v-model="provider.type_doc"
+                  option-value="name"
+                  option-text="name"
+                  placeholder="Seleccione"
+                >
+                </model-list-select>
                 </select>
               </div>
             </div>
@@ -202,6 +212,7 @@
                   v-model="provider.number_doc"
                   class="form-control"
                   placeholder="Número de ruc/dni "
+                  maxlength="15"
                 />
               </div>
             </div>
@@ -216,6 +227,8 @@
                   v-model="provider.name"
                   class="form-control"
                   placeholder="Nombre de proveedor"
+                  maxlength="250"
+
                 />
               </div>
             </div>
@@ -229,6 +242,8 @@
                   v-model="provider.address"
                   class="form-control"
                   placeholder="Ingrese dirección"
+                  maxlength="250"
+
                 />
               </div>
             </div>
@@ -242,7 +257,7 @@
                   v-model="provider.phone"
                   class="form-control"
                   placeholder="Ingrese teléfono"
-                  max="12"
+                  maxlength="12"
                 />
               </div>
             </div>
@@ -257,6 +272,8 @@
                   v-model="provider.email"
                   class="form-control"
                   placeholder="Ingrese correo"
+                  maxlength="250"
+
                 />
               </div>
             </div>
@@ -305,15 +322,18 @@
 import axios from "../../Config/axios";
 import "@fortawesome/fontawesome-free/js/all.js";
 import swal from "sweetalert";
+import { ModelListSelect } from "vue-search-select";
 
+import "vue-search-select/dist/VueSearchSelect.css";
 
 
 export default {
   name: "Provider",
-  components: {  },
+  components: { ModelListSelect },
   data() {
     return {
       arrayProviders: [],
+      arrayTypeDoc:[{name:'DNI'},{name:'RUC'}],
       provider: {
         name: "",
         type_doc: "",

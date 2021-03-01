@@ -94,6 +94,8 @@
                     v-model="sale.observation"
                     class="form-control form-control-sm"
                     placeholder="Observación a la compra"
+                    maxlength="250"
+
                   />
                 </div>
               </div>
@@ -348,6 +350,8 @@
                   v-model="clientNew.number_doc"
                   class="form-control"
                   placeholder="Número de RUC/DNI "
+                  maxlength="15"
+
                 />
               </div>
             </div>
@@ -362,6 +366,8 @@
                   v-model="clientNew.name"
                   class="form-control"
                   placeholder="Nombre de proveedor"
+                  maxlength="250"
+
                 />
               </div>
             </div>
@@ -375,6 +381,8 @@
                   v-model="clientNew.address"
                   class="form-control"
                   placeholder="Ingrese dirección"
+                  maxlength="250"
+
                 />
               </div>
             </div>
@@ -388,6 +396,8 @@
                   v-model="clientNew.phone"
                   class="form-control"
                   placeholder="Ingrese teléfono"
+                  maxlength="12"
+
                 />
               </div>
             </div>
@@ -402,6 +412,8 @@
                   v-model="clientNew.email"
                   class="form-control"
                   placeholder="Ingrese correo"
+                  maxlength="250"
+
                 />
               </div>
             </div>

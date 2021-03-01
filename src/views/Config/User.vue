@@ -119,6 +119,8 @@
                   v-model="user.name"
                   class="form-control"
                   placeholder="Nombre de usuario"
+                  maxlength="250"
+
                 />
               </div>
             </div>

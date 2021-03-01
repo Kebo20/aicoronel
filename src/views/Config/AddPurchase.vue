@@ -84,6 +84,8 @@
                     v-model="purchase.observation"
                     class="form-control form-control-sm"
                     placeholder="Observación a la compra"
+                    maxlength="250"
+
                   />
                 </div>
               </div>
