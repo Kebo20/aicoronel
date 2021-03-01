@@ -47,13 +47,7 @@
                   sorter: false,
                   filter: true,
                 },
-                {
-                  key: 'email',
-                  label: 'Correo',
-                  _style: { width: '20%' },
-                  sorter: false,
-                  filter: true,
-                },
+
                 {
                   key: 'role_name',
                   label: 'Rol',
@@ -102,7 +96,9 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">Registrar Usuario</h4>
+            <h4 class="modal-title" v-if="accion==1">Registrar Usuario</h4>
+            <h4 class="modal-title" v-else>Modificar Usuario</h4>
+
             <button
               type="button"
               class="close"
@@ -141,7 +137,7 @@
                 </model-list-select>
               </div>
             </div>
-            <div class="form-group row">
+            <!-- <div class="form-group row">
               <label class="col-md-3 form-control-label" for="email-input"
                 >Correo</label
               >
@@ -153,31 +149,42 @@
                   placeholder="Ingrese un correo"
                 />
               </div>
-            </div>
-            <div class="form-group row">
+            </div> -->
+
+            <div class="form-group row" v-if="accion==2">
               <label class="col-md-3 form-control-label" for="email-input"
-                >Contraseña</label
+                >¿Actualizar contraseña?</label
               >
               <div class="col-md-9">
-                <input
-                  type="text"
-                  v-model="password"
-                  class="form-control"
-                  placeholder="Ingrese una nueva contraseña"
-                />
+                <input type="checkbox" v-model="updatePassword" class="" />
               </div>
             </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="email-input"
-                >Repita contraseña</label
-              >
-              <div class="col-md-9">
-                <input
-                  type="text"
-                  v-model="password_repeat"
-                  class="form-control"
-                  placeholder="Ingrese otra vez la contraseña"
-                />
+            <div v-show="updatePassword||accion==1">
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="email-input"
+                  >Contraseña</label
+                >
+                <div class="col-md-9">
+                  <input
+                    type="text"
+                    v-model="password"
+                    class="form-control"
+                    placeholder="Ingrese una nueva contraseña"
+                  />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="email-input"
+                  >Repita contraseña</label
+                >
+                <div class="col-md-9">
+                  <input
+                    type="text"
+                    v-model="password_repeat"
+                    class="form-control"
+                    placeholder="Ingrese otra vez la contraseña"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -243,6 +250,7 @@ export default {
       id: "",
       password: "",
       password_repeat: "",
+      updatePassword: false,
     };
   },
 
@@ -354,32 +362,33 @@ export default {
         count = 1;
         return count;
       }
-      if (me.user.email == "") {
-        swal("Datos incompletos", "Ingrese un correo", "warning");
-        count = 1;
-        return count;
-      }
+      // if (me.user.email == "") {
+      //   swal("Datos incompletos", "Ingrese un correo", "warning");
+      //   count = 1;
+      //   return count;
+      // }
+      if (me.updatePassword||me.accion==1) {
+        if (me.password == "") {
+          swal("Datos incompletos", "Ingrese una contraseña ", "warning");
+          count = 1;
+          return count;
+        }
 
-      if (me.password == "") {
-        swal("Datos incompletos", "Ingrese una contraseña ", "warning");
-        count = 1;
-        return count;
-      }
+        if (!strongRegex.test(me.password)) {
+          swal(
+            "Datos incorrectos",
+            "La contraseña debe tener mínimo 8 digitos, una letra y un número",
+            "warning"
+          );
+          count = 1;
+          return count;
+        }
 
-      if (!strongRegex.test(me.password)) {
-        swal(
-          "Datos incorrectos",
-          "La contraseña debe tener mínimo 8 digitos, una letra y un número",
-          "warning"
-        );
-        count = 1;
-        return count;
-      }
-
-      if (me.password != me.password_repeat) {
-        swal("Datos incompletos", "Contraseñas no coinciden ", "warning");
-        count = 1;
-        return count;
+        if (me.password != me.password_repeat) {
+          swal("Datos incompletos", "Contraseñas no coinciden ", "warning");
+          count = 1;
+          return count;
+        }
       }
 
       if (me.rol.id_role == "") {
@@ -398,7 +407,7 @@ export default {
         axios
           .post("/auth/users", {
             name: me.user.name,
-            email: me.user.email,
+            // email: me.user.email,
             id_role: me.rol.id_role,
             password: me.password,
           })
@@ -419,7 +428,8 @@ export default {
         axios
           .put("/auth/users/" + me.id, {
             name: me.user.name,
-            email: me.user.email,
+            // email: me.user.email,
+            updatePassword:me.updatePassword,
             id_role: me.rol.id_role,
             password: me.password,
           })

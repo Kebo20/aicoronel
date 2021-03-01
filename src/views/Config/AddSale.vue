@@ -151,7 +151,7 @@
               </div>
               <div class="form-group col-sm-12 col-md-6 col-lg-2">
                 <label class="form-control-label" for="email-input"
-                  >Precios disponibles</label
+                  >Precios </label
                 >
                 <div class="">
                   <select
