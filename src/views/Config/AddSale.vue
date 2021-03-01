@@ -682,10 +682,11 @@ export default {
         })
         .then(function (response) {
           if (response) {
+            me.clear();
+
             swal("Correcto", response.data.message, "success");
             me.correlativo();
 
-            me.clear();
           } else {
             swal("Error ", response.message, "error");
           }
@@ -703,6 +704,7 @@ export default {
       me.sale = {
         date: "",
         type_doc: "FACTURA",
+        number_doc: "",
         observation: "",
         id_storage: "1",
       };
