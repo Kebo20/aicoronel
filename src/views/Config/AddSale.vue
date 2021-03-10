@@ -20,7 +20,8 @@
                     type="date"
                     v-model="sale.date"
                     class="form-control form-control-sm"
-                    placeholder="Nombre de producto"
+                    @change="correlativo"
+
                   />
                 </div>
               </div>
@@ -622,12 +623,13 @@ export default {
     correlativo() {
       let me = this;
       axios
-        .post("/auth/sales/correlativo", { type_doc: me.sale.type_doc })
+        .post("/auth/sales/correlativo", { type_doc: me.sale.type_doc,date:me.sale.date })
         .then(function (response) {
           me.sale.number_doc = response.data.code;
         })
         .catch(function (error) {
           console.log(error);
+          me.sale.number_doc =''
         });
     },
 
