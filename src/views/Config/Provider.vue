@@ -371,9 +371,7 @@ export default {
       this.clean();
       this.getProvider(id);
       let me = this;
-      me.id = id;
-      me.accion = 2;
-      me.modal = 1;
+    
     },
     delet(id) {
       swal({
@@ -428,6 +426,9 @@ export default {
         .get("/auth/providers/" + id)
         .then(function (response) {
           me.provider = response.data.data;
+            me.id = id;
+      me.accion = 2;
+      me.modal = 1;
           console.log(response);
         })
         .catch(function (error) {

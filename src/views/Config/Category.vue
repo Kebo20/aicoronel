@@ -198,10 +198,7 @@ export default {
       this.clean();
       this.getCategory(id);
       let me = this;
-      me.accion = 2;
-      me.id = id;
-
-      me.modal = 1;
+     
     },
     delet(id) {
       swal({
@@ -257,6 +254,10 @@ export default {
         .get("/auth/categories/" + id)
         .then(function (response) {
           me.category = response.data.data;
+           me.accion = 2;
+      me.id = id;
+
+      me.modal = 1;
           console.log(response);
         })
         .catch(function (error) {

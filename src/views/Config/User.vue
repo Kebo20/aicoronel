@@ -279,9 +279,7 @@ export default {
       this.clean();
       this.getUser(id);
       let me = this;
-      me.id = id;
-      me.accion = 2;
-      me.modal = 1;
+     
     },
     delet(id) {
       swal({
@@ -349,6 +347,9 @@ export default {
         .then(function (response) {
           me.user = response.data.data;
           me.rol = { id_role: me.user.id_role };
+           me.id = id;
+      me.accion = 2;
+      me.modal = 1;
         })
         .catch(function (error) {
           console.log(error);

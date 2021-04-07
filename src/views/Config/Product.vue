@@ -42,6 +42,13 @@
               :fields="
                 rol == '1'
                   ? [
+                   {
+                        key: 'code',
+                        label: 'Código',
+                        _style: { width: '20%' },
+                        sorter: false,
+                        filter: true,
+                      },
                       {
                         key: 'name',
                         label: 'Nombre',
@@ -89,6 +96,13 @@
                       },
                     ]
                   : [
+                   {
+                        key: 'code',
+                        label: 'Código',
+                        _style: { width: '20%' },
+                        sorter: false,
+                        filter: true,
+                      },
                       {
                         key: 'name',
                         label: 'Nombre',
@@ -176,6 +190,22 @@
             </button>
           </div>
           <div class="modal-body">
+               <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="text-input"
+                >Código</label
+              >
+              <div class="col-md-9">
+                <input
+                  type="text"
+                  v-model="product.code"
+                  class="form-control"
+                  placeholder="Ingrese un código"
+                  maxlength="250"
+
+                />
+              </div>
+              </div>
+
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input"
                 >Nombre</label
@@ -321,6 +351,7 @@ export default {
     return {
       arrayProducts: [],
       product: {
+        code:'',
         name: "",
         brand: "",
         price: "",
@@ -365,9 +396,7 @@ export default {
       this.clean();
       this.getProduct(id);
       let me = this;
-      me.id = id;
-      me.accion = 2;
-      me.modal = 1;
+     
     },
     delet(id) {
       swal({
@@ -438,6 +467,9 @@ export default {
           me.product = response.data.data;
 
           me.category = { id_category: me.product.id_category };
+           me.id = id;
+      me.accion = 2;
+      me.modal = 1;
         })
         .catch(function (error) {
           console.log(error);
@@ -472,6 +504,7 @@ export default {
       if (me.accion == 1) {
         axios
           .post("/auth/products", {
+            code: me.product.code,
             name: me.product.name,
             brand: me.product.brand,
             price: me.product.price,
@@ -496,6 +529,7 @@ export default {
       } else {
         axios
           .put("/auth/products/" + me.id, {
+            code: me.product.code,
             name: me.product.name,
             brand: me.product.brand,
             price: me.product.price,
