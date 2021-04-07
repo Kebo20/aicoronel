@@ -31,13 +31,14 @@
 
           <CCardBody>
             <CDataTable
-              :items-per-page="5"
+              :items-per-page="15"
               :dark="false"
               :items="arrayProducts"
               :hover="true"
               :fixed="true"
               :border="true"
               :column-filter="true"
+              size='small'
               caption="Lista de productos"
               :fields="
                 rol == '1'
@@ -45,42 +46,42 @@
                    {
                         key: 'code',
                         label: 'Código',
-                        _style: { width: '20%' },
+                        _style: { width: '1%' },
                         sorter: false,
                         filter: true,
                       },
                       {
                         key: 'name',
                         label: 'Nombre',
-                        _style: { width: '20%' },
+                        _style: { width: '1%' },
                         sorter: false,
                         filter: true,
                       },
                       {
                         key: 'category_name',
                         label: 'Categoría',
-                        _style: { width: '20%' },
+                        _style: { width: '1%' },
                         sorter: false,
                         filter: true,
                       },
                       {
                         key: 'brand',
                         label: 'Marca',
-                        _style: { width: '20%' },
+                        _style: { width: '1%' },
                         sorter: false,
                         filter: true,
                       },
                       {
                         key: 'price',
                         label: 'Precio',
-                        _style: { width: '20%' },
+                        _style: { width: '1%'},
                         sorter: false,
                         filter: true,
                       },
                       {
                         key: 'price2',
-                        label: 'Precio por mayor',
-                        _style: { width: '20%' },
+                        label: 'Por mayor',
+                        _style: { width: '1%' },
                         sorter: false,
                         filter: true,
                       },
@@ -99,42 +100,42 @@
                    {
                         key: 'code',
                         label: 'Código',
-                        _style: { width: '20%' },
+                        _style: { width: '1%' },
                         sorter: false,
                         filter: true,
                       },
                       {
                         key: 'name',
                         label: 'Nombre',
-                        _style: { width: '20%' },
+                        _style: { width: '1%' },
                         sorter: false,
                         filter: true,
                       },
                       {
                         key: 'category_name',
                         label: 'Categoría',
-                        _style: { width: '20%' },
+                        _style: { width: '1%' },
                         sorter: false,
                         filter: true,
                       },
                       {
                         key: 'brand',
                         label: 'Marca',
-                        _style: { width: '20%' },
+                        _style: { width: '1%' },
                         sorter: false,
                         filter: true,
                       },
                       {
                         key: 'price',
                         label: 'Precio',
-                        _style: { width: '20%' },
+                        _style: { width: '1%'},
                         sorter: false,
                         filter: true,
                       },
                          {
                         key: 'price2',
-                        label: 'Precio por mayor',
-                        _style: { width: '20%' },
+                        label: 'Por mayor',
+                        _style: { width: '1%' },
                         sorter: false,
                         filter: true,
                       },
