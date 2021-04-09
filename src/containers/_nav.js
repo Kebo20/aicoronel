@@ -111,6 +111,14 @@ export default [
         to: '/storage',
         //icon: 'cil-storage'
       },
+      store.state.rol===1?
+      {
+        _name: 'CSidebarNavItem',
+        name: '* Inventario inicial',
+        to: '/initial-inventory',
+        //icon: 'cil-storage'
+      }
+      :'',
     ]
   }
 ]

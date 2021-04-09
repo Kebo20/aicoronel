@@ -26,6 +26,8 @@ const DetailSale = () => import('@/views/Config/DetailSale')
 const ReportSale = () => import('@/views/Config/ReportSale')
 
 const Storage = () => import('@/views/Config/Storage')
+const InitialInventory = () => import('@/views/Config/InitialInventory')
+
 
 
 const P404 = () => import('@/views/errors/Page404')
@@ -119,6 +121,20 @@ const router = new Router({
           path: 'storage',
           name:'Almacén',
           component: Storage
+        },
+        {
+          path: 'initial-inventory',
+          name: 'Inventario inicial',
+          component: InitialInventory,
+          beforeEnter:(to, from, next) => {
+           let rol=store.state.rol
+           if(rol==1){
+            next()
+          }else{
+             next("/404")
+           }
+          
+          }
         },
 
         {
