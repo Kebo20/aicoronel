@@ -17,6 +17,7 @@ const Login = () => import('@/views/Login/Login')
 const AddPurchase = () => import('@/views/Config/AddPurchase')
 const ListPurchase = () => import('@/views/Config/ListPurchase')
 const DetailPurchase = () => import('@/views/Config/DetailPurchase')
+const EditPurchase = () => import('@/views/Config/EditPurchase')
 const ReportPurchase = () => import('@/views/Config/ReportPurchase')
 
 
@@ -169,6 +170,11 @@ const router = new Router({
               path: 'detail/:id',
               name: 'Detalle de compra',
               component: DetailPurchase
+            },
+            {
+              path: 'edit/:id',
+              name: 'Editar compra',
+              component: EditPurchase
             }
             ,
             {

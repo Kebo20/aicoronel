@@ -16,7 +16,7 @@
 
           <CCardBody>
             <CDataTable
-              :items-per-page="5"
+              :items-per-page="15"
               :dark="false"
               :items="arraySales"
               :hover="true"

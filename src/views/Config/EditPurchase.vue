@@ -6,7 +6,10 @@
           <CCardHeader>
             <CRow>
               <CCol lg="10" sm="6">
-                <slot name="header"> Nueva Venta</slot>
+                <slot name="header">
+                  <span class="fa fa-plus-circle"></span>
+                  Nueva compra</slot
+                >
               </CCol>
             </CRow>
           </CCardHeader>
@@ -18,33 +21,21 @@
                 <div class="">
                   <input
                     type="date"
-                    v-model="sale.date"
+                    v-model="purchase.date_original"
                     class="form-control form-control-sm"
-                    @change="correlativo"
-
+                    placeholder="Nombre de producto"
                   />
                 </div>
               </div>
               <div class="form-group col-sm-12 col-md-6 col-lg-4">
                 <label class="form-control-label" for="email-input"
-                  >Cliente</label
+                  >Proveedor</label
                 >
-                <a
-                  @click="
-                    modal = 1;
-                    accion = 1;
-                    id = 0;
-                    clean();
-                  "
-                  class="btn btn-xs"
-                >
-                  <span class="fa fa-plus-circle"></span>
-                </a>
                 <div class="">
                   <model-list-select
-                    :list="arrayClients"
-                    v-model="client"
-                    option-value="id_client"
+                    :list="arrayProviders"
+                    v-model="provider"
+                    option-value="id_provider"
                     option-text="name"
                     placeholder="Seleccione"
                     class="form-control form-control-sm"
@@ -52,17 +43,15 @@
                   </model-list-select>
                 </div>
               </div>
-
               <div class="form-group col-sm-12 col-md-6 col-lg-4">
                 <label class="form-control-label" for="email-input"
                   >Tipo de documento</label
                 >
                 <div class="">
                   <select
-                    v-model="sale.type_doc"
+                    v-model="purchase.type_doc"
                     placeholder="Seleccione"
                     class="select-search form-control form-control-sm"
-                    @change="correlativo"
                   >
                     <option selected="true" value="BOLETA">Boleta</option>
                     <option value="FACTURA">Factura</option>
@@ -77,10 +66,9 @@
                 <div class="">
                   <input
                     type="text"
-                    v-model="sale.number_doc"
+                    v-model="purchase.number_doc"
                     class="form-control form-control-sm"
                     placeholder="Número de documento "
-                    readonly
                   />
                 </div>
               </div>
@@ -92,7 +80,7 @@
                 <div class="">
                   <input
                     type="text"
-                    v-model="sale.observation"
+                    v-model="purchase.observation"
                     class="form-control form-control-sm"
                     placeholder="Observación a la compra"
                     maxlength="250"
@@ -105,7 +93,7 @@
                 >
                 <div class="" v-if="rol == '1'">
                   <select
-                    v-model="sale.id_storage"
+                    v-model="purchase.id_storage"
                     placeholder="Seleccione"
                     class="select-search form-control form-control-sm"
                   >
@@ -125,7 +113,7 @@
                   <input
                     type="text"
                     class="form-control form-control-sm"
-                    value="Bagua Grande"
+                    value="Bagua Chica"
                     readonly
                   />
                 </div>
@@ -135,7 +123,7 @@
               <hr />
             </div>
             <div class="row">
-              <div class="form-group col-sm-12 col-md-6 col-lg-5">
+              <div class="form-group col-sm-12 col-md-6 col-lg-6">
                 <label class="form-control-label" for="email-input"
                   >Producto</label
                 >
@@ -151,26 +139,17 @@
                   </model-list-select>
                 </div>
               </div>
-              <div class="form-group col-sm-12 col-md-6 col-lg-3">
+              <div class="form-group col-sm-12 col-md-6 col-lg-2">
                 <label class="form-control-label" for="email-input"
-                  >Precios
-                </label>
+                  >Precio</label
+                >
                 <div class="">
-                  <select
-                    v-model="price"
-                    placeholder="Seleccione"
-                    class="select-search form-control form-control-sm"
-                  >
-                    <option selected="true" :value="product.price">
-                     <b> Estandar---------S/. {{ product.price }} </b>
-                    </option>
-                    <option v-if="product.price2 != 0" :value="product.price2">
-                    <b> Por mayor-------S/. {{ product.price2 }}  </b>
-                    </option>
-                      <option v-if="product.price_min != 0" :value="product.price_min">
-                    <b> Mínimo-----------S/. {{ product.price_min }} </b>
-                    </option>
-                  </select>
+                  <input
+                    type="number"
+                    v-model="detail.price"
+                    class="form-control form-control-sm"
+                    min="0"
+                  />
                 </div>
               </div>
               <div class="form-group col-sm-12 col-md-6 col-lg-2">
@@ -204,8 +183,7 @@
                     <th></th>
                     <th>Producto</th>
                     <th>Precio</th>
-                    <th>Cant.</th>
-                    <th>Dscto.</th>
+                    <th>Cantidad</th>
                     <th>Importe</th>
                   </tr>
                 </thead>
@@ -227,7 +205,6 @@
                         type="number"
                         min="0"
                         class="form-control form-control-sm text-right"
-                        disabled
                       />
                     </td>
                     <td>
@@ -237,15 +214,8 @@
                         class="form-control form-control-sm text-right"
                       />
                     </td>
-                    <td>
-                      <input
-                        v-model="d.discount"
-                        type="number"
-                        class="form-control form-control-sm text-right"
-                      />
-                    </td>
                     <td
-                      v-text="(d.quantity * d.price - d.discount).toFixed(2)"
+                      v-text="(d.quantity * d.price).toFixed(2)"
                       class="text-right"
                     ></td>
                   </tr>
@@ -257,15 +227,15 @@
                   style="background-color: #3192a5"
                 >
                   <tr>
-                    <td colspan="5">Subtotal</td>
+                    <td colspan="4">Subtotal</td>
                     <td v-text="dato.subtotal"></td>
                   </tr>
                   <tr>
-                    <td colspan="5">Igv (18%)</td>
+                    <td colspan="4">Igv (18%)</td>
                     <td v-text="dato.igv" class=""></td>
                   </tr>
                   <tr>
-                    <td colspan="5">Total</td>
+                    <td colspan="4">Total</td>
                     <td v-text="dato.total" class=""></td>
                   </tr>
                 </tbody>
@@ -273,9 +243,11 @@
             </div>
 
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" @click="clear()">
-                Cerrar
-              </button>
+              <router-link :to="{ path: `/purchase` }">
+                <button class="btn btn-secondary">
+                  Regresar <span class="fa fa-arrow-circle-left"></span>
+                </button>
+              </router-link>
               <button
                 type="button"
                 class="btn btn-primary"
@@ -297,152 +269,6 @@
         </CCol>
       </CRow>
     </CCard>
-    <!--Inicio del modal agregar/actualizar-->
-    <div
-      class="modal fade"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="myModalLabel"
-      style="display: none"
-      aria-hidden="true"
-      :class="{ mostrar: modal }"
-    >
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">Registrar Cliente</h4>
-            <button
-              type="button"
-              class="close"
-              @click="modal = 0"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="email-input"
-                >Tipo de documento</label
-              >
-              <div class="col-md-9">
-                <!-- <select
-                  v-model="client.type_doc"
-                  class="select-search form-control"
-                >
-                  <option selected value="DNI">DNI</option>
-                  <option value="RUC">RUC</option>
-                </select> -->
-                <model-list-select
-                  :list="arrayTypeDoc"
-                  v-model="clientNew.type_doc"
-                  option-value="name"
-                  option-text="name"
-                  placeholder="Seleccione"
-                >
-                </model-list-select>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="text-input"
-                >Número de documento</label
-              >
-              <div class="col-md-9">
-                <input
-                  type="text"
-                  v-model="clientNew.number_doc"
-                  class="form-control"
-                  placeholder="Número de RUC/DNI "
-                  maxlength="15"
-                />
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="text-input"
-                >Nombre</label
-              >
-              <div class="col-md-9">
-                <input
-                  type="text"
-                  v-model="clientNew.name"
-                  class="form-control"
-                  placeholder="Nombre de proveedor"
-                  maxlength="250"
-                />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="email-input"
-                >Dirección</label
-              >
-              <div class="col-md-9">
-                <input
-                  type="email"
-                  v-model="clientNew.address"
-                  class="form-control"
-                  placeholder="Ingrese dirección"
-                  maxlength="250"
-                />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="email-input"
-                >Celular/Teléfono</label
-              >
-              <div class="col-md-9">
-                <input
-                  type="text"
-                  v-model="clientNew.phone"
-                  class="form-control"
-                  placeholder="Ingrese teléfono"
-                  maxlength="12"
-                />
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <label class="col-md-3 form-control-label" for="email-input"
-                >Correo</label
-              >
-              <div class="col-md-9">
-                <input
-                  type="email"
-                  v-model="clientNew.email"
-                  class="form-control"
-                  placeholder="Ingrese correo"
-                  maxlength="250"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="modal = 0">
-              Cerrar
-            </button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              v-if="accion == 1"
-              @click="saveClient()"
-            >
-              Guardar
-            </button>
-            <!-- <button
-              type="button"
-              class="btn btn-primary"
-              v-if="accion == 2"
-              @click="save()"
-            >
-              Actualizar
-            </button> -->
-          </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal-dialog -->
-    </div>
-    <!--Fin del modal-->
   </div>
 </template>
 
@@ -455,43 +281,26 @@ import { ModelListSelect } from "vue-search-select";
 import "vue-search-select/dist/VueSearchSelect.css";
 
 export default {
-  name: "addSale",
+  name: "addProvider",
   components: {},
   data() {
     return {
-      arrayTypeDoc: [{ name: "DNI" }, { name: "RUC" }],
-
       arrayProducts: [],
 
-      client: { id_client: "", name: "" },
-      clientNew: {
-        name: "",
-        type_doc: "DNI",
-        number_doc: "",
-        email: "",
-        phone: "",
-        address: "",
-      },
+      provider: { id_provider: "", name: "" },
       product: { id_product: "", name: "" },
-      price: 0,
-      arrayClients: [],
-      sale: {
-        date: "",
-        type_doc: "FACTURA",
-        number_doc: "",
-        observation: "",
-        id_storage: "1",
-      },
+
+      arrayProviders: [],
+      purchase: {},
       detail: {
         quantity: "0",
         price: "0",
-        discount: "0",
       },
       arrayDetail: [],
       modalRegistrar: false,
       modal: 0,
       accion: 1,
-      id: "",
+      id: this.$route.params.id,
       rol: this.$store.state.rol,
     };
   },
@@ -506,8 +315,7 @@ export default {
       for (var i = 0; i < me.arrayDetail.length; i++) {
         var subtotal =
           parseFloat(me.arrayDetail[i].price) *
-            parseInt(me.arrayDetail[i].quantity) -
-          me.arrayDetail[i].discount;
+          parseInt(me.arrayDetail[i].quantity);
         neto = neto + subtotal;
       }
       var impuesto = (neto * 0.18) / (1 + 0.18);
@@ -524,18 +332,33 @@ export default {
     },
   },
   mounted() {
+    this.getPurchase();
     this.products();
-    this.clients();
-    this.correlativo();
-    let me = this;
+    this.providers();
+    // this.correlativo()
   },
   methods: {
+    getPurchase() {
+      let me = this;
+      axios
+        .get("/auth/purchases/" + me.id)
+        .then(function (response) {
+          me.purchase = response.data.data;
+          me.provider.name=response.data.data.provider_name
+          me.provider.id_provider=response.data.data.id_provider
+          me.arrayDetail=response.data.data.detail
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
     addDetail() {
       let me = this;
 
       if (
         me.detail.quantity < 1 ||
-        me.price < 0.1 ||
+        me.detail.price < 0.1 ||
         me.product.id_product == ""
       ) {
         swal({
@@ -562,8 +385,7 @@ export default {
         id_product: me.product.id_product,
         name: me.product.name_brand,
         quantity: me.detail.quantity,
-        price: me.price,
-        discount: me.detail.discount,
+        price: me.detail.price,
       });
       me.detail.quantity = 0;
       me.detail.price = 0;
@@ -596,12 +418,12 @@ export default {
           console.log(error);
         });
     },
-    clients() {
+    providers() {
       let me = this;
       axios
-        .get("/auth/clients")
+        .get("/auth/providers")
         .then(function (response) {
-          me.arrayClients = response.data.data;
+          me.arrayProviders = response.data.data;
           console.log(response);
         })
         .catch(function (error) {
@@ -623,40 +445,28 @@ export default {
         });
     },
 
-    correlativo() {
-      let me = this;
-      axios
-        .post("/auth/sales/correlativo", { type_doc: me.sale.type_doc,date:me.sale.date })
-        .then(function (response) {
-          me.sale.number_doc = response.data.code;
-        })
-        .catch(function (error) {
-          console.log(error);
-          me.sale.number_doc =''
-        });
-    },
-
     validate() {
       let me = this;
       let count = 0;
-      if (me.sale.date == "") {
+
+      if (me.purchase.date == "") {
         swal("Datos incompletos", "Ingrese una fecha", "warning");
         count = 1;
       }
-      if (me.sale.number_doc == "") {
+      if (me.purchase.number_doc == "") {
         swal("Datos incompletos", "Ingrese un número de documento", "warning");
         count = 1;
       }
-      if (me.sale.type_doc == "") {
+      if (me.purchase.type_doc == "") {
         swal("Datos incompletos", "Ingrese un tipo de documento", "warning");
         count = 1;
       }
-      if (me.client.id_client == "") {
-        swal("Datos incompletos", "Seleccione un cliente", "warning");
+      if (me.provider.id_provider == "") {
+        swal("Datos incompletos", "Seleccione una proveedor", "warning");
         count = 1;
       }
 
-      if (me.sale.id_storage == "" && rol == "1") {
+      if (me.provider.id_storage == "" && rol == "1") {
         swal("Datos incompletos", "Seleccione una tienda", "warning");
         count = 1;
       }
@@ -676,22 +486,19 @@ export default {
       }
 
       axios
-        .post("/auth/sales", {
-          date: me.sale.date,
-          type_doc: me.sale.type_doc,
-          number_doc: me.sale.number_doc,
-          id_client: me.client.id_client,
-          observation: me.sale.observation,
-          id_storage: me.sale.id_storage,
+        .put("/auth/purchases/"+me.id, {
+          date: me.purchase.date_original,
+          type_doc: me.purchase.type_doc,
+          number_doc: me.purchase.number_doc,
+          id_provider: me.provider.id_provider,
+          observation: me.purchase.observation,
+          id_storage: me.purchase.id_storage,
           details: me.arrayDetail,
         })
         .then(function (response) {
           if (response) {
-            me.clear();
-
             swal("Correcto", response.data.message, "success");
-            me.correlativo();
-
+            me.clear();
           } else {
             swal("Error ", response.message, "error");
           }
@@ -702,75 +509,27 @@ export default {
         });
       me.modal = 0;
     },
+
     clear() {
       let me = this;
-      me.client = { id_client: "", name: "" };
-      me.product = { id_product: "", name: "" };
-      me.sale = {
-        date: "",
-        type_doc: "FACTURA",
-        number_doc: "",
-        observation: "",
-        id_storage: "1",
-      };
+      (me.provider = { id_provider: "", name: "" }),
+        (me.product = { id_product: "", name: "" }),
+        (me.purchase = {
+          date: "",
+          type_doc: "FACTURA",
+          number_doc: "",
+          observation: "",
+          id_storage: "1",
+        });
       (me.detail = {
         quantity: "0",
         price: "0",
-        discount: "0",
       }),
         (me.arrayDetail = []);
     },
 
     validator(val) {
       return val ? val.length > 0 : false;
-    },
-
-    validateClient() {
-      let me = this;
-      let count = 0;
-
-      if (me.clientNew.type_doc == "") {
-        swal("Datos incompletos", "Ingrese un tipo de documento", "warning");
-        count = 1;
-      }
-      if (me.clientNew.number_doc == "") {
-        swal("Datos incompletos", "Ingrese un número de documento", "warning");
-        count = 1;
-      }
-      if (me.clientNew.name == "") {
-        swal("Datos incompletos", "Ingrese un nombre", "warning");
-        count = 1;
-      }
-
-      return count;
-    },
-
-    saveClient() {
-      let me = this;
-      if (this.validateClient() > 0) {
-        return false;
-      }
-
-      if (me.accion == 1) {
-        axios
-          .post("/auth/clients", {
-            name: me.clientNew.name,
-            type_doc: me.clientNew.type_doc,
-            number_doc: me.clientNew.number_doc,
-            address: me.clientNew.address,
-            phone: me.clientNew.phone,
-            email: me.clientNew.email,
-          })
-          .then(function (response) {
-            me.clients();
-            swal("Correcto", response.data.message, "success");
-            me.modal = 0;
-          })
-          .catch(function (error) {
-            console.log(error.response);
-            swal("Error ", error.response.data.message, "error");
-          });
-      }
     },
   },
 };

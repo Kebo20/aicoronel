@@ -38,12 +38,12 @@
               :fixed="true"
               :border="true"
               :column-filter="true"
-              size='small'
+              size="small"
               caption="Lista de productos"
               :fields="
                 rol == '1'
                   ? [
-                   {
+                      {
                         key: 'code',
                         label: 'Código',
                         _style: { width: '1%' },
@@ -72,20 +72,26 @@
                         filter: true,
                       },
                       {
+                        key: 'price_min',
+                        label: 'Precio min.',
+                        _style: { width: '1%' },
+                        sorter: false,
+                        filter: false,
+                      },
+                      {
                         key: 'price',
                         label: 'Precio',
-                        _style: { width: '1%'},
+                        _style: { width: '1%' },
                         sorter: false,
-                        filter: true,
+                        filter: false,
                       },
                       {
                         key: 'price2',
                         label: 'Por mayor',
                         _style: { width: '1%' },
                         sorter: false,
-                        filter: true,
+                        filter: false,
                       },
-                     
 
                       {
                         key: 'actions',
@@ -97,7 +103,7 @@
                       },
                     ]
                   : [
-                   {
+                      {
                         key: 'code',
                         label: 'Código',
                         _style: { width: '1%' },
@@ -128,11 +134,11 @@
                       {
                         key: 'price',
                         label: 'Precio',
-                        _style: { width: '1%'},
+                        _style: { width: '1%' },
                         sorter: false,
                         filter: true,
                       },
-                         {
+                      {
                         key: 'price2',
                         label: 'Por mayor',
                         _style: { width: '1%' },
@@ -191,7 +197,7 @@
             </button>
           </div>
           <div class="modal-body">
-               <div class="form-group row">
+            <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input"
                 >Código</label
               >
@@ -202,10 +208,9 @@
                   class="form-control"
                   placeholder="Ingrese un código"
                   maxlength="250"
-
                 />
               </div>
-              </div>
+            </div>
 
             <div class="form-group row">
               <label class="col-md-3 form-control-label" for="text-input"
@@ -218,7 +223,6 @@
                   class="form-control"
                   placeholder="Nombre de producto"
                   maxlength="250"
-
                 />
               </div>
             </div>
@@ -257,7 +261,20 @@
                   class="form-control"
                   placeholder="Ingrese precio"
                   maxlength="10"
-
+                />
+              </div>
+            </div>
+               <div class="form-group row">
+              <label class="col-md-3 form-control-label" for="email-input"
+                >Precio mínimo</label
+              >
+              <div class="col-md-9">
+                <input
+                  type="number"
+                  v-model="product.price_min"
+                  class="form-control"
+                  placeholder="Ingrese precio mínimo"
+                  maxlength="10"
                 />
               </div>
             </div>
@@ -273,7 +290,6 @@
                   class="form-control"
                   placeholder="Ingrese precio al por mayor"
                   maxlength="10"
-
                 />
               </div>
             </div>
@@ -288,7 +304,6 @@
                   class="form-control"
                   placeholder="Ingrese nombre de marca"
                   maxlength="100"
-
                 />
               </div>
             </div>
@@ -352,10 +367,11 @@ export default {
     return {
       arrayProducts: [],
       product: {
-        code:'',
+        code: "",
         name: "",
         brand: "",
         price: "",
+        price_min: "",
         price2: "",
         units: "",
         id_category: "",
@@ -397,7 +413,6 @@ export default {
       this.clean();
       this.getProduct(id);
       let me = this;
-     
     },
     delet(id) {
       swal({
@@ -468,9 +483,9 @@ export default {
           me.product = response.data.data;
 
           me.category = { id_category: me.product.id_category };
-           me.id = id;
-      me.accion = 2;
-      me.modal = 1;
+          me.id = id;
+          me.accion = 2;
+          me.modal = 1;
         })
         .catch(function (error) {
           console.log(error);
@@ -509,6 +524,7 @@ export default {
             name: me.product.name,
             brand: me.product.brand,
             price: me.product.price,
+            price_min: me.product.price_min,
             price2: me.product.price2,
 
             id_category: me.category.id_category,
@@ -533,6 +549,7 @@ export default {
             code: me.product.code,
             name: me.product.name,
             brand: me.product.brand,
+            price_min: me.product.price_min,
             price: me.product.price,
             price2: me.product.price2,
 

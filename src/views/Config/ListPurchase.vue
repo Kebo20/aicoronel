@@ -16,7 +16,7 @@
 
           <CCardBody>
             <CDataTable
-              :items-per-page="5"
+              :items-per-page="15"
               :dark="false"
               :items="arrayPurchases"
               :small="true"
@@ -33,7 +33,7 @@
                   sorter: false,
                   filter: true,
                 },
-               
+
                 {
                   key: 'number_doc',
                   label: 'Número ',
@@ -84,14 +84,22 @@
                   sorter: false,
                   filter: true,
                 },
-                 {
+                  {
+                  key: 'action_edit',
+                  label: 'Editar',
+                  _style: { width: '5%' },
+                  value: '',
+                  sorter: false,
+                  filter: false,
+                },
+                {
                   key: 'status',
-                  label: 'Estado',
+                  label: '',
                   _style: { width: '10%' },
                   value: '',
                   sorter: false,
-                  filter:true
-                 },
+                  filter: false,
+                },
 
                 {
                   key: 'action_detail',
@@ -114,9 +122,26 @@
             >
               <template #status="{ item }">
                 <td align="center">
-                  <CBadge v-if="item.status=='1'" color='success'>Activo</CBadge>
-                  <CBadge v-else color='danger'>Anulada</CBadge>
+                  <CBadge v-if="item.status == '1'" color="success"
+                    >Activo</CBadge
+                  >
+                  <CBadge v-else color="danger">Anulada</CBadge>
+                </td>
+              </template>
+              <template #action_edit="{ item }">
+                <td align="center">
+                  <router-link
+                    v-if="item.status == '1'"
+                    :to="{ path: `/purchase/edit/${item.id_purchase}` }"
+                  >
+                    <CBadge color="success">
+                      <span class="fa fa-edit"></span
+                    ></CBadge>
+                  </router-link>
 
+                   <CBadge v-else  color="default">
+                      <span disabled class="fa fa-edit"></span
+                    ></CBadge>
                 </td>
               </template>
               <template #action_detail="{ item }">
@@ -124,21 +149,21 @@
                   <router-link
                     :to="{ path: `/purchase/detail/${item.id_purchase}` }"
                   >
-                    <CBadge color="success"
-                      > <span class="fa fa-search-plus"></span
+                    <CBadge color="success">
+                      <span class="fa fa-search-plus"></span
                     ></CBadge>
                   </router-link>
                 </td>
               </template>
               <template #action_delete="{ item }">
-                <td align="center" >
-                  <a href="#" v-if="item.status=='1'">
-                    <CBadge @click="delet(item.id_purchase)" color="danger"
-                      > <span class="fa fa-ban"></span></CBadge
+                <td align="center">
+                  <a href="#" v-if="item.status == '1'">
+                    <CBadge @click="delet(item.id_purchase)" color="danger">
+                      <span class="fa fa-ban"></span></CBadge
                   ></a>
                   <a href="#" v-else>
-                    <CBadge color="secondary"
-                      > <span disabled class="fa fa-ban"></span></CBadge
+                    <CBadge color="secondary">
+                      <span disabled class="fa fa-ban"></span></CBadge
                   ></a>
                 </td>
               </template>
@@ -155,13 +180,12 @@ import axios from "../../Config/axios";
 import "@fortawesome/fontawesome-free/js/all.js";
 import swal from "sweetalert";
 
-
 import { ModelListSelect } from "vue-search-select";
 import "vue-search-select/dist/VueSearchSelect.css";
 
 export default {
   name: "Tables",
-  components: {  },
+  components: {},
   data() {
     return {
       arrayPurchases: [],
