@@ -92,11 +92,11 @@
                 },
                  {
                   key: 'status',
-                  label: 'Estado',
+                  label: '',
                   _style: { width: '10%' },
                   value: '',
                   sorter: false,
-                  filter:true
+                  filter:false
                  },
 
                  {
