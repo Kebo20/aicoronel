@@ -25,6 +25,8 @@ const AddSale = () => import('@/views/Config/AddSale')
 const ListSale = () => import('@/views/Config/ListSale')
 const DetailSale = () => import('@/views/Config/DetailSale')
 const ReportSale = () => import('@/views/Config/ReportSale')
+const PurchaseByProduct = () => import('@/views/Config/PurchaseByProduct')
+
 
 const Storage = () => import('@/views/Config/Storage')
 const InitialInventory = () => import('@/views/Config/InitialInventory')
@@ -208,6 +210,11 @@ const router = new Router({
               path: 'detail/:id',
               name: 'Detalle de venta',
               component: DetailSale
+            },
+            {
+              path: 'products',
+              name: 'Consultar compras por producto',
+              component: PurchaseByProduct
             },
             {
               path: 'reports',

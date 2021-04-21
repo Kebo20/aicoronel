@@ -100,6 +100,10 @@ export default [
             to: '/sale/list'
           },
           {
+            name: 'Compras por producto',
+            to: '/sale/products'
+          },
+          {
             name: 'Reportes',
             to: '/sale/Reports'
           }
